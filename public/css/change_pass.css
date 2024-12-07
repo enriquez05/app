@@ -71,7 +71,7 @@ body {
 .sidebar .bot {
     position: absolute;
     bottom: 20px;
-    width: calc(100% - 20px);
+    /* width: calc(100% - 20px);  */  /* nasakop neto buong width di ko mapindot yung button kaya conimment ko muna */
 }
 
 /* Content Area */
