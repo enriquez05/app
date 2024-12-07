@@ -12,11 +12,10 @@ let unsubscribe;
 
 document.addEventListener("DOMContentLoaded", function () {
     checkUserLoginStatus();
-    unsubscribe();
 });
 
 function checkUserLoginStatus() {
-    unsubscribe = onAuthStateChanged(auth, async (user) => {
+    onAuthStateChanged(auth, async (user) => {
         if (user) {
             try {
                 // Fetch user role from Firestore
@@ -119,7 +118,7 @@ function initializeLoginEvent() {
 
 function handleRoleRedirection(role, email) {
     const rolePages = {
-        ADMIN: "../html/inventory.html",
+        ADMIN: "../html/transaction.html",
         EMPLOYEE: "../html/sales.html",
     };
 
