@@ -142,7 +142,7 @@ body {
 .date{
     position: absolute;
     top: 20px;
-    right: 20px;
+    left: 1100px;
     padding: 10px 20px;
     background-color: #ffafb6;
     border: none;
@@ -187,7 +187,6 @@ body {
 .btn button{
     background-color: #ff9999;
     margin-top: 50px;
-    position: absolute;
     bottom: 150px;
     left: 1000px;
     padding: 10px 20px;
