@@ -76,11 +76,110 @@ body {
 
 /* Content Area */
 .content {
-    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 100px;
+}
+
+.item-stocks h2{
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-items: center;
-    padding: 30px;
+    margin-bottom: 30px;
+}
+
+.title{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+}
+
+.item-stocks{
+    display: flex;
+    flex-direction: column;
+}
+
+.item{
+    background-color: #ff9999;
+    width: 400px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+.item h3{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.stocks{
+    background-color: #ff9999;
+    width: 400px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.stocks h3{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.date{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 10px 20px;
+    background-color: #ffafb6;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.topping1, .topping2, .topping3, .topping4, .topping5, .topping6, .cup1{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.item1, .item2, .item3, .item4, .item5, .item6, .cup2{
+    background-color: #ffe3e3;
+    width: 400px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+.stocks1, .stocks2, .stocks3, .stocks4, .stocks5, .stocks6, .cup3{
+    background-color: #ffe3e3;
+    display: flex;
+    width: 400px;
+    height: 50px;
+    justify-content: center;
+    align-items: center;
+}
+
+.hidden {
+    display: none;
 }
 
