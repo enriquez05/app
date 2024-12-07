@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Test</title>
+    <link rel="stylesheet" href="/css/transaction.css" />
+  </head>
+  <body>
+
+   <div class="whole">
+        <div class="sidebar">
+
+            <div class="top">
+                <a class="transaction" href="/html/transaction.html">Transaction</a>
+                <a href="/html/sales.html">Sales</a>
+                <a href="/html/inventory.html">Inventory</a>
+                <a href="/html/invetory_history.html">Inventory History</a>
+            </div>
+            <div class="bot">
+                <a href="/html/change_pass.html">Change Password</a>
+                <a href="/html/login.html">Sign Out</a>
+            </div>
+
+        </div>
+        <button class="final">Finalize Sales</button>
+        <div class="content">
+            <div class="item">
+              <h3> Tap OK to add item </h3>
+                  <div class="items">
+                    <label for="item">Item</label>
+                    <input type="text" id="item" name="item" value="Cup">
+                  </div>
+                  <div class="weight">
+                    <label for="weight">Weight (g)</label>
+                    <input type="number" id="weight" name="weight" value="0000">
+                  </div>
+                  <div class="total">
+                    <label for="total"> Total </label>
+                    <input type="number" required name="price" min="0" value="00.00" step="0.0">
+                  </div>
+                  <div class="okay2">
+                    <button class="okay">OK</button>
+                  </div>
+            </div>
+            <div class="payment">
+              <div class="orders_payment">
+                <div class="orders">
+                  <p>orders</p>
+                </div>
+                <div class="grams">
+                  <p>grams</p>
+                </div>
+                <div class="price">
+                  <p>price</p>
+                </div>
+              </div>
+              <div class="summary">
+                <div class="no_total">
+                  <div class="no">
+                    <p>number of items</p>
+                  </div>
+                  <div class="subtotal">
+                    <p>subtotal</p>
+                  </div>
+                </div>
+                <div class="discount">
+                  <button>Add Discount</button>
+                </div>
+                <div class="vat">
+                  <button>VAT</button>
+                </div>
+                <div class="total_price">
+                  <p>total price</p>
+                  <p>price</p>
+                </div>
+              </div>
+              <div class="gotop">
+                <button class="go_to"> Go to payment </button>
+              </div>
+            </div>
+        </div>
+   </div>
+  </body>
+</html>
