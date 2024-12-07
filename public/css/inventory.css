@@ -200,9 +200,103 @@ body {
 .popup1{
     display: none;
     flex-direction: column;
-    width: 80vw; /* palitan mo nalang to */
+    width: 500px;
     padding: 20px;
     border-radius: 20px;
-    height: 90vh; /* palitan mo nalang to */
-    background-color: #a71f1f;
+    height: 700px; /* palitan mo nalang to */
+    background-color: white;
+    align-items: center;
 }
+
+.toppings-title{
+    display: flex;
+    flex-direction: column;
+    font-size: 26px;
+    margin-top: 50px;
+    height: 50px;
+    width: 300px;
+    background-color: #f7838d;
+    border-radius: 10px;
+}
+
+.toppings-title{
+    justify-content: center;
+    align-items: center;
+    font-weight: 600;
+    margin-bottom: 50px;
+}
+
+.number, .price{
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+}
+
+.current-stocks, .gram{
+    margin-bottom: 30px;
+}
+
+.addStocks, .priceUpdate{
+    width: 100%;
+    padding: 20px;
+}
+
+.add-label, .price-label{
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+.add-label label, .price-label label{
+    background-color: #ff9999;
+    display: flex;
+    flex-direction: column;
+    width: 120px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.add-input, .price-input{
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    margin-top: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.add-input input, .price-input input{
+    height: 40px;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    margin-top: 5px;
+}
+
+.add-input button, .price-input button {
+    background-color: #ff9999;
+    height: 35px;
+    width: 90px;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+}
+
+.log-btn{
+    display: flex;
+    flex-direction: column;
+    height: 35px;
+    width: 150px;
+    justify-content: center;
+    align-items: center;
+    background-color: #ff9999;
+    margin-top: 20px;
+    border-radius: 10px;
+    font-weight: 600;
+}
+
