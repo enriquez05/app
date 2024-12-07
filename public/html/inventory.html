@@ -6,6 +6,7 @@
     <title>Test</title>
     <link rel="stylesheet" href="../css/inventory.css" />
     <script src="../js/inventory.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
 
@@ -39,76 +40,79 @@
                         <h3> CURRENT STOCKS </h3>
                     </div>
                 </div>
-                <div class="topping1">
-                    <div class="item1" id="topping1">
-                        <p> TOPPINGS 1 </p>
+                <div id="inventory_item_container">
+                    <div class="topping1">
+                        <div class="item1" id="topping1">
+                            <p id="topping1Name"> TOPPINGS 1 </p>
+                        </div>
+                        <div class="stocks1">
+                            <div class="stocks_container">
+                                <p id="topping1Value">here</p>
+                            </div>
+                        </div>
                     </div>
-                    <div class="stocks1">
-                        <div class="stocks_container">
-                            <p>here</p>
+                    <div class="topping2">
+                        <div class="item2">
+                            <p id="topping2Name"> TOPPINGS 2 </p>
+                        </div>
+                        <div class="stocks2">
+                            <div class="stocks_container">
+                                <p id="topping2Value">here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topping3">
+                        <div class="item3">
+                            <p id="topping3Name"> TOPPINGS 3 </p>
+                        </div>
+                        <div class="stocks3">
+                            <div class="stocks_container">
+                                <p id="topping3Value">here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topping4">
+                        <div class="item4">
+                            <p id="topping4Name"> TOPPINGS 4 </p>
+                        </div>
+                        <div class="stocks4">
+                            <div class="stocks_container">
+                                <p id="topping4Value">here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topping5">
+                        <div class="item5">
+                            <p id="topping5Name"> TOPPINGS 5 </p>
+                        </div>
+                        <div class="stocks5">
+                            <div class="stocks_container">
+                                <p id="topping5Value">here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="topping6">
+                        <div class="item6">
+                            <p id="topping6Name"> TOPPINGS 6</p>
+                        </div>
+                        <div class="stocks6">
+                            <div class="stocks_container">
+                                <p id="topping6Value">here</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="cup1">
+                        <div class="cup2">
+                            <p id="utensils1Name"> CUPS</p>
+                        </div>
+                        <div class="cup3">
+                            <div class="stocks_container">
+                                <p id="utensils1Value">here</p>
+                            </div>
                         </div>
                     </div>
                 </div>
-                <div class="topping2">
-                    <div class="item2">
-                        <p> TOPPINGS 2 </p>
-                    </div>
-                    <div class="stocks2">
-                        <div class="stocks_container">
-                            <p>here</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="topping3">
-                    <div class="item3">
-                        <p> TOPPINGS 3 </p>
-                    </div>
-                    <div class="stocks3">
-                        <div class="stocks_container">
-                            <p>here</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="topping4">
-                    <div class="item4">
-                        <p> TOPPINGS 4 </p>
-                    </div>
-                    <div class="stocks4">
-                        <div class="stocks_container">
-                            <p>here</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="topping5">
-                    <div class="item5">
-                        <p> TOPPINGS 5 </p>
-                    </div>
-                    <div class="stocks5">
-                        <div class="stocks_container">
-                            <p>here</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="topping6">
-                    <div class="item6">
-                        <p> TOPPINGS 6</p>
-                    </div>
-                    <div class="stocks6">
-                        <div class="stocks_container">
-                            <p>here</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="cup1">
-                    <div class="cup2">
-                        <p> CUPS</p>
-                    </div>
-                    <div class="cup3">
-                        <div class="stocks_container">
-                            <p>here</p>
-                        </div>
-                    </div>
-                </div>
+                
                 <div class="btn">
                     <button>View Daily Item Report</button>
                 </div>

@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test</title>
     <link rel="stylesheet" href="../css/transaction_payment.css" />
+    <script src="../js/transactionPayment.js" type="module"></script>
   </head>
   <body>
 
@@ -12,14 +13,14 @@
         <div class="sidebar">
 
             <div class="top">
-                <a class="transaction"  href="/html/transaction.html">Transaction</a>
+                <a class="transaction"  href="/html/transaction.html" id="transaction_option">Transaction</a>
                 <a href="/html/sales.html">Sales</a>
                 <a href="/html/inventory.html">Inventory</a>
                 <a href="/html/invetory_history.html">Inventory History</a>
             </div>
             <div class="bot">
                 <a href="/html/change_pass.html">Change Password</a>
-                <a href="/html/login.html">Sign Out</a>
+                <a href="#" id="logout">Sign Out</a>
             </div>
 
         </div>
@@ -45,7 +46,7 @@
                 </div>
                 <div class="btns">
                     <div class="back">
-                        <button>BACK</button>
+                        <button id="back_btn1">BACK</button>
                     </div>
                     <div class="pay">
                         <button>PAY</button>
