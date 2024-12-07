@@ -230,7 +230,9 @@ body {
 .number, .price{
     display: flex;
     flex-direction: column;
-    background-color: black;
+    border-bottom: solid 1px black;
+    text-align: center;
+    font-weight: 600;
 }
 
 .current-stocks, .gram{
@@ -321,6 +323,10 @@ body {
     border: 1px solid black;
     border-radius: 5px;
     margin-bottom: 5px;
+}
+
+.added-grams input{
+    width: 100%;
 }
 
 .confirm-btn{

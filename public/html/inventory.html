@@ -119,15 +119,15 @@
             </div>
 
             <div class="popup1" id="popup1">
-                <button class="back">
+                <button class="back" id="back_btn1">
                     <img src = "../img/back_button.png">
                 </button>
-                <div class="toppings-title">
+                <div class="toppings-title" id="popup1_name">
                     <p> TOPPING 1</p>
                 </div>
 
                 <div class="current-stocks">
-                    <div class="number">
+                    <div class="number" id="stocks_value">
                         <p> 1 </p>
                     </div>
                     <div class="current">
@@ -135,7 +135,7 @@
                     </div>
                 </div>
                 <div class="price_per_gram">
-                    <div class="price">
+                    <div class="price" id="price_value">
                         <p> 1 </p>
                     </div>
                     <div class="gram">
@@ -148,7 +148,7 @@
                     </div>
                     <div class="add-input">
                         <input type="number" id="add_stocks" name="add_stocks" value="00">
-                        <button> Confirm </button>
+                        <button id="add_stocks_btn"> Confirm </button>
                     </div>
                 </div>
                 <div class="priceUpdate">
@@ -156,8 +156,8 @@
                         <label for="price-update">PRICE UPDATE</label>
                     </div>
                     <div class="price-input">
-                        <input type="number" id="add_stocks" name="price-update" value="00">
-                        <button> Confirm </button>
+                        <input type="number" id="add_stocks_price" name="price-update" value="00">
+                        <button id="add_stocks_price_btn"> Confirm </button>
                     </div>
                 </div>
 
@@ -165,7 +165,7 @@
             </div>
 
             <div class="popup2" id="popup2">
-                <button class="back">
+                <button class="back" id="back_btn2">
                     <img src = "../img/back_button.png">
                 </button>
                 <div class="log-title">
@@ -175,25 +175,25 @@
                     <div class="weight-title">
                         <p> CURRENT WEIGHT </p>
                     </div>
-                    <div class="grams">
-                        <p>1</p>
+                    <div class="grams" >
+                        <p id="grams_weightValue">1</p>
                     </div>
                 </div>
                 <div class="total-weight">
                     <div class="weight-title">
                         <p> TOTAL WEIGHT </p>
                     </div>
-                    <div class="grams">
-                        <p>1</p>
+                    <div class="grams" >
+                        <p id="grams_totalWeightValue">1</p>
                     </div>
                 </div>
-                <button class="confirm-btn">CONFIRM</button>
+                <button class="confirm-btn" id="add_weight_btn">CONFIRM</button>
                 <div class="added-weight">
                     <div class="added-title">
                         <p> ADDED WEIGHT </p>
                     </div>
                     <div class="added-grams">
-                        <p>1</p>
+                        <input type="number" id="added_weight" name="added_weight" value="00">
                     </div>
                 </div>
             </div>
