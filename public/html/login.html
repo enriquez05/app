@@ -5,6 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test</title>
     <link rel="stylesheet" href="../css/login.css" />
+    <script src="../js/login.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
 
@@ -17,7 +19,7 @@
 
       <div class="dropdown">
         <div class="select">
-          <span class = "selected"> Admin </span>
+          <span class = "selected" id="role_selected"> Admin </span>
           <div class="caret"></div>
         </div>
         <ul class="menu">
@@ -29,7 +31,7 @@
       <div class="username_pass">
         <div class="username">
           <label for="username">username</label>
-          <input type="text" id="username" name="username">
+          <input type="text" id="username" name="username" placeholder="example@pos.com">
         </div>
         <div class="password">
           <label for="password">password</label>
@@ -38,9 +40,13 @@
       </div>
 
       <div class="button">
-        <a href="../html/transaction.html">
-          <button class="login-btn"> LOGIN </button>
+        <a href="#">
+          <button class="login-btn" id="login_button"> LOGIN </button>
         </a>
+        
+        <!-- <a href="../html/transaction.html">
+          <button class="login-btn"> LOGIN </button>
+        </a> -->
       </div>
           
 
