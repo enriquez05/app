@@ -277,6 +277,7 @@ body {
     flex-direction: row;
     gap: 30px;
     margin-top: 5px;
+    text-align: right;
 }
 
 .add-input button, .price-input button {
