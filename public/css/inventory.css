@@ -198,3 +198,12 @@ body {
     cursor: pointer;
 }
 
+.popup1{
+    display: none;
+    flex-direction: column;
+    width: 80vw; /* palitan mo nalang to */
+    padding: 20px;
+    border-radius: 20px;
+    height: 90vh; /* palitan mo nalang to */
+    background-color: #a71f1f;
+}
