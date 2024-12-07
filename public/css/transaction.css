@@ -37,12 +37,13 @@ body {
     background-color: #f2d6d8;
     height: 100%;
     font-size: 18px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Sidebar Links */
 .sidebar a {
     justify-content: center;
-    height: 70px;
     width: 100%;
     display: block;
     color: black;
@@ -54,11 +55,10 @@ body {
 
 .top{
     margin-top: 50px;
+    flex: 1;
 }   
 
 .bot a{
-    height: 70px;
-    width: 250px;
     font-size: 20px;
 }
 
@@ -68,10 +68,8 @@ body {
 }
 
 /* Bottom Section of Sidebar */
-.sidebar .bot {
-    position: absolute;
+.bot {
     bottom: 20px;
-    width: calc(100% - 20px);
 }
 
 /*content*/
@@ -229,4 +227,61 @@ input {
   height: 50px;
   width: 300px;
   border-radius: 10px;
+}
+
+
+@media (max-width: 768px) {
+  .sidebar{
+    font-size: 15px;
+    width: 200px;
+    padding: 20px;
+  }
+  .top{
+    margin-top: 0px;
+  }
+  .sidebar a{
+    font-size: 15px;
+    padding: 10px;
+  }
+  .content{
+    margin-left: 1%;
+  }
+  .item {
+      margin-top: 10%;
+      width: 300px;
+  }
+  .payment{
+    margin-top: 10%;
+    margin-left: 20px;
+    width: 300px;
+    height: 100%;
+  }
+  .grams{
+    flex: 1;
+    margin-left: 0px;
+    text-align: right;
+  }
+  .discount, .vat{
+    display: flex;
+    justify-content: right;
+  }
+  .discount button, .vat button{
+    margin-left: 0px;
+  }
+  .total_price{
+    margin-left: 0px;
+    justify-content: right;
+  }
+  .gotop a{
+    width: 100%;
+  }
+  .go_to{
+    width: 100%;
+    padding-left: 20%;
+    padding-right: 20%;
+  }
+  .final{
+    top: 10px;
+    right: 10px;
+  }
 }

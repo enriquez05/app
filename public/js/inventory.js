@@ -51,6 +51,8 @@ function checkUserLoginStatus() {
 function setEventListeners(){
     const item_stocks = document.getElementById("item_stocks");
     const popup1 = document.getElementById("popup1");
+    const log_addition_btn = document.getElementById("log_addition_btn");
+    const popup2 = document.getElementById("popup2");
     const toppings = document.querySelectorAll(".item1");
 
     toppings.forEach((topping) => {
@@ -58,6 +60,11 @@ function setEventListeners(){
             item_stocks.style.display = "none";
             popup1.style.display = "flex";
         });
+    });
+
+    log_addition_btn.addEventListener("click", () => {
+        popup1.style.display = "none";
+        popup2.style.display = "flex";
     });
 }
 
