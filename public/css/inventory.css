@@ -183,3 +183,18 @@ body {
     display: none;
 }
 
+
+.btn button{
+    background-color: #ff9999;
+    margin-top: 50px;
+    position: absolute;
+    bottom: 150px;
+    left: 1000px;
+    padding: 10px 20px;
+    background-color: #ffafb6;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
