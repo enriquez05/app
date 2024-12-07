@@ -184,8 +184,12 @@ body {
     display: none;
 }
 
+.btn{
+    display: flex;
+    flex-direction: row;
+}
 
-.btn button{
+.btn a{
     background-color: #ff9999;
     margin-top: 50px;
     bottom: 150px;
@@ -195,7 +199,8 @@ body {
     border: none;
     border-radius: 5px;
     font-size: 16px;
-    cursor: pointer;
+    text-decoration: none;
+    color: black;
 }
 
 .popup1, .popup2{

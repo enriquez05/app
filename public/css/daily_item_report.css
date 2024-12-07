@@ -10,10 +10,12 @@
 
 body {
     display: flex;
+    height: 100vh;
     justify-content: center;
     align-items: center;
     background-color: #f7cdd0;
     overflow-x: hidden; 
+    overflow-y: hidden; 
 }
 
 .change-pass{
@@ -28,21 +30,14 @@ body {
 }
 
 /* Sidebar Styling */
-/* Sidebar Styling */
 .sidebar {
     margin: 0;
     padding: 30px;
     width: 300px;
     background-color: #f2d6d8;
-    height: 100vh; /* Ensures it spans the full height of the viewport */
+    height: 100%;
     font-size: 18px;
-    position: fixed; /* Fixes the sidebar to the left */
-    top: 0;
-    left: 0;
-    overflow-y: auto; /* Adds scroll if content overflows */
-    overflow-x: hidden;
 }
-
 
 /* Sidebar Links */
 .sidebar a {
@@ -76,7 +71,7 @@ body {
 .sidebar .bot {
     position: absolute;
     bottom: 20px;
-    width: calc(100% - 20px);
+    /* width: calc(100% - 20px);  */  /* nasakop neto buong width di ko mapindot yung button kaya conimment ko muna */
 }
 
 /* Content Area */
@@ -86,10 +81,27 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 30px;
-    margin-top: 100px;
 }
 
-.days{
+.date{
+    position: absolute;
+    top: 20px;
+    left: 1100px;
+    padding: 10px 20px;
+    background-color: #ffafb6;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    margin-top: 50px;
+}
+
+.content h1{
+    display: flex;
+    flex-direction: column;
+    margin-top: 120px;
+}
+
+.utensils_toppings{
     background-color: #f7838d;
     display: flex;
     flex-direction: row;
@@ -97,24 +109,45 @@ body {
     width: 600px;
     align-items: center;
     justify-content: center;
-    gap: 70px;
+    gap: 150px;
     border-radius: 30px;
     font-style: normal;
 }
 
-.days a {
-    color: black;
+.utensils_toppings a{
     text-decoration: none;
+    color: black;
 }
 
-.graph{
-    margin-top: 50px;
-    border: 1px solid black;
-    height: 500px;
-    width: 1000px;
-}
-
-.graph-title{
+.search input{
+    border-radius: 10px;
+    margin-bottom: 100px;
     margin-top: 20px;
-    font-size: 20px;
+    height: 40px;
+    width: 500px;
+}
+
+.table{
+    display: flex;
+    flex-direction: row;
+    gap:100px;
+}
+
+
+.title-date, .title-item, .title-sold, .title-total{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7838d;
+    width: 200px;
+    font-weight: 700;
+    height: 45px;
+}
+
+.content-date, .content-item, .content-sold, .content-total{
+    border: 1px solid black;
+    margin: 10px;
+    width: 200px;
+    height: 45px;
 }
