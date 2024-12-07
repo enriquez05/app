@@ -26,7 +26,7 @@ function checkUserLoginStatus() {
                     console.log("role: "+role);
 
                     // Redirect or validate based on role
-                    if (role === "EMPLOYEE") {
+                    if (role === "ADMIN") {
                         const transaction_option = document.getElementById("transaction_option");
                         transaction_option.style.display = 'none';
                     }
