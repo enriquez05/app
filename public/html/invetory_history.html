@@ -6,6 +6,7 @@
     <title>Test</title>
     <link rel="stylesheet" href="../css/inventory_history.css" />
     <script src="../js/inventoryHistory.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
   <body>
 
@@ -29,7 +30,7 @@
             <h1> Total Grams Sold </h1>
             <div class="days">
               <div class="active">
-                <a href="../html/invetory_history.html"> <b> Daily </b></a>
+                <a href="../html/invetory_history.html" id="selectedTimeframe"><b>Daily</b></a>
               </div>
               <div class="weekly">
                 <a href="../html/weekly.html"> Weekly</a>
@@ -41,23 +42,28 @@
                 <a href="../html/annual.html"> Annual </a>
               </div>
             </div>
-            <div class="graph">
+
+            <div id="graphsContainer" class="graphs-container">
+              <div class="graph">
               
-            </div>
-            <div class="graph-title">
-              <p> TOPPING 1 </p>
-            </div>
-            <div class="graph">
-              
-            </div>
-            <div class="graph-title">
-              <p> TOPPING 2 </p>
-            </div>
-            <div class="graph">
-              
-            </div>
-            <div class="graph-title">
-              <p> TOPPING 3 </p>
+              </div>
+              <div class="graph-title">
+                <p> TOPPING 1 </p>
+              </div>
+  
+              <div class="graph">
+                
+              </div>
+              <div class="graph-title">
+                <p> TOPPING 2 </p>
+              </div>
+  
+              <div class="graph">
+                
+              </div>
+              <div class="graph-title">
+                <p> TOPPING 3 </p>
+              </div>
             </div>
         </div>
    </div>

@@ -11,7 +11,7 @@ let selectedRole = "";
 let unsubscribe;
 
 document.addEventListener("DOMContentLoaded", function () {
-    checkUserLoginStatus();
+    initializeLoginEvent();
 });
 
 function checkUserLoginStatus() {
@@ -92,10 +92,12 @@ function initializeLoginEvent() {
                                 text: `User role mismatch: User not found in ${selectedRole}.`,
                                 icon: 'error',
                                 confirmButtonText: 'OK',
-                            }).then(() => {
-                                console.log("User got logged out.");
-                                auth.signOut();
-                                initializeLoginEvent();
+                            }).then((result) => {
+                                if (result.isConfirmed) {
+                                    console.log("User got logged out.");
+                                    auth.signOut();
+                                    initializeLoginEvent();
+                                }
                             });
                         } else {initializeLoginEvent();}
                     } else {
@@ -118,8 +120,8 @@ function initializeLoginEvent() {
 
 function handleRoleRedirection(role, email) {
     const rolePages = {
-        ADMIN: "../html/transaction.html",
-        EMPLOYEE: "../html/sales.html",
+        ADMIN: "../html/sales.html",
+        EMPLOYEE: "../html/transaction.html",
     };
 
     if (rolePages[role]) {
@@ -128,9 +130,11 @@ function handleRoleRedirection(role, email) {
             text: `Logged in as ${email}`,
             icon: 'success',
             confirmButtonText: 'OK',
-        }).then(() => {
-            console.log(`Redirecting to: ${rolePages[role]}`);
-            window.location.href = rolePages[role];
+        }).then((result) => {
+            if (result.isConfirmed) { 
+                console.log(`Redirecting to: ${rolePages[role]}`);
+                window.location.href = rolePages[role];
+            }
         });
     } else {
         Swal.fire({
@@ -138,6 +142,10 @@ function handleRoleRedirection(role, email) {
             text: 'Unknown role, cannot redirect.',
             icon: 'error',
             confirmButtonText: 'OK',
-        }).then(() => auth.signOut());
+        }).then((result) => {
+            if (result.isConfirmed) {
+                auth.signOut();
+            }
+        });
     }
 }

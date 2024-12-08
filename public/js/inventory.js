@@ -200,7 +200,7 @@ function displayClickedContent(dataContent){
         console.log("add_stocks_price: " + add_stocks_price);
 
         if (add_stocks_price > 0) {
-            dataContent.item_sellingPrice += add_stocks_price;
+            dataContent.item_sellingPrice = add_stocks_price;
             price_value.innerHTML = `<p>₱${dataContent.item_sellingPrice}</p>`;
             updateItemInFirestore(dataContent);
         } else {

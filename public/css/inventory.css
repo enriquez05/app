@@ -332,6 +332,7 @@ body {
 
 .added-grams input{
     width: 100%;
+    text-align: center;
 }
 
 .confirm-btn{

@@ -115,6 +115,36 @@ body {
 }
 
 .graph-title{
-    margin-top: 20px;
+    margin-top: 10px;
     font-size: 20px;
+}
+
+.graph-title p {
+    text-align: center;
+}
+
+@media (max-width: 1440px){
+    .sidebar{
+        font-size: 15px;
+        width: 200px;
+        padding: 20px;
+    }
+    .sidebar a{
+        height: auto;
+    }
+    .top{
+        margin-top: 0px;
+    }
+    .sidebar a{
+        font-size: 15px;
+        padding: 10px;
+    }
+    .content{
+        margin-left: 1%;
+        margin-top: 0;
+    }
+    .graph{
+        width: 700px;
+        height: 350px;
+    }
 }
