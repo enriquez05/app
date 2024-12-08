@@ -144,8 +144,7 @@ body {
     transition: background-color 0.3s ease;
 }
 
-
-input {
+input, select {
     display: block;
     width: 100%;
     margin: 10px 0;
@@ -153,7 +152,11 @@ input {
     border: 1px solid #ccc;
     border-radius: 5px;
     font-size: 16px;
-  }
+}
+
+.ops{
+    width: 100px;
+}
   
 @media (max-width: 1440px){
     .sidebar{

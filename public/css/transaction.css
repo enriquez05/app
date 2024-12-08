@@ -178,7 +178,7 @@ body {
   margin-left: 30px;
 }
 
-.remove-item{
+.remove-item, .remove-item-d{
   margin-left: 20px;
   color: red;
   cursor: pointer;

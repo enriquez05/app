@@ -7,6 +7,7 @@ import {
     getDocs,
     doc,
     collection,
+    addDoc,
 } from "./firebaseConfig.js";
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -15,6 +16,7 @@ document.addEventListener("DOMContentLoaded", function() {
     logout.addEventListener("click", () => {logoutUser()});
     back_btn1.addEventListener("click", () => {window.location.href="/html/transaction.html"});
     checkUserLoginStatus();
+    retrieveOrderDetails();
 });
 
 function checkUserLoginStatus() {
@@ -45,6 +47,82 @@ function checkUserLoginStatus() {
             console.log("User not logged in.");
             window.location.href = '../html/login.html'; 
         }
+    });
+}
+
+function retrieveOrderDetails(){
+    const urlParams = new URLSearchParams(window.location.search);
+    const orderDetailsString = urlParams.get("orderDetails");
+    let orderDetails = null;
+
+    if (orderDetailsString) {
+        orderDetails = JSON.parse(decodeURIComponent(orderDetailsString));
+        console.log("Retrieved orderDetails:", orderDetails);
+    }
+
+    // payment form
+    const total = document.getElementById("total");
+    const pvalue = document.getElementById("pvalue");
+    const change1 = document.getElementById("change1");
+    const pay_btn = document.getElementById("pay_btn");
+
+    let totalPrice = orderDetails.order_totalPrice.toFixed(2);
+    let currentChange = 0;
+    let currentPaymentValue = 0;
+    total.value = totalPrice
+
+    pvalue.addEventListener("input", () => {
+        currentPaymentValue = document.getElementById("pvalue").value;
+        currentChange = currentPaymentValue - totalPrice;
+        change1.value = currentChange;
+    });
+
+    pay_btn.addEventListener("click", async () => {
+        const payment_method = document.getElementById("payment_method");
+        const paymentValue = parseFloat(currentPaymentValue);
+        const priceValue = parseFloat(totalPrice);
+
+        if (paymentValue >= priceValue){
+            const transactionCollection = collection(fdb, "transactions");
+            orderDetails.order_paymentChange = currentChange;
+            orderDetails.order_paymentMethod = payment_method.value;
+            orderDetails.order_paymentValue = paymentValue;
+            
+            // Get the current date and time
+            const now = new Date();
+    
+            // Format the date as DD/MM/YYYY
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+            orderDetails.order_dateOrdered = `${day}/${month}/${year}`;
+    
+            // Format the time as HH:mm:ss (24-hour format)
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+            orderDetails.order_timeOrdered = `${hours}:${minutes}:${seconds}`;
+
+            // Add the orderDetails to Firestore
+            addDoc(transactionCollection, orderDetails)
+                .then((docRef) => {
+                    console.log("Transaction added with ID:", docRef.id);
+                    // call function for popup success modal
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: `Error adding transaction: ${error}`,
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Error adding transaction:", error);
+                        }
+                    });
+                });
+        }
+        console.log("orderDetails:", orderDetails);
     });
 }
 

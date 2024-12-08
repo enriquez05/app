@@ -6,6 +6,7 @@
     <title>Test</title>
     <link rel="stylesheet" href="../css/transaction_payment.css" />
     <script src="../js/transactionPayment.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
   </head>
   <body>
 
@@ -30,11 +31,14 @@
                 <h3 class="txt">Payment</h3>
                 <div class="total1">
                     <label for="total">Total</label>
-                    <input type="number" id="total" name="total">
+                    <input type="number" id="total" name="total" readonly>
                 </div>
                 <div class="mode">
                     <label for="mode">Mode of Payment</label>
-                    <input type="dropdown" id="modep" name="mode1" value="Cash">
+                    <select id="payment_method" name="choices">
+                        <option selected value="cash" class="ops">Cash</option>
+                        <option value="gcash" class="ops">Gcash</option>
+                    </select>
                 </div>
                 <div class="value">
                     <label for="value">Payment Value</label>
@@ -42,14 +46,14 @@
                 </div>
                 <div class="change">
                     <label for="change1">Change</label>
-                    <input type="number" id="change1" name="change1">
+                    <input type="number" id="change1" name="change1" readonly>
                 </div>
                 <div class="btns">
                     <div class="back">
                         <button id="back_btn1">BACK</button>
                     </div>
                     <div class="pay">
-                        <button>PAY</button>
+                        <button id="pay_btn">PAY</button>
                     </div>
                 </div>
             </div>
