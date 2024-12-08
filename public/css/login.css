@@ -176,7 +176,6 @@ body {
   width: 385px;
   height: 55px;
   padding: 0 15px;
-  margin-top: 50px;
   border: 2px solid #2a2f3b;
   border-radius: 30px;
   background-color: #f7838d;
@@ -185,4 +184,67 @@ body {
   justify-content: center;
   align-items: center;
   cursor: pointer; /* Ensures it's clickable */
+}
+
+@media (max-width: 768px) {
+  #main_div{
+    height: 100vh;
+    width: 100vw;
+  }
+  #log_text_div{
+    height: 60px;
+    font-size: 60px;
+  }
+  .qText{
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  .dropdown{
+    top: 140px;
+  }
+  .menu{
+    top: 50px;
+    left: 54%;
+    width: 100%;
+  }
+  .username_pass{
+    top: 210px;
+    gap: 10px;
+  }
+  .button{
+    top: 425px;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 425px){
+  #log_text_div{
+    height: 40px;
+    font-size: 50px;
+  }
+  .qText{
+    font-size: 15px;
+  }
+  .dropdown{
+    width: 250px;
+    top: 110px;
+  }
+  .menu{
+    left: 50%;
+    width: 90%;
+  }
+  .username_pass{
+    width: 250px;
+    top: 180px;
+  }
+  .username input, .password input, .select{
+    width: 220px;
+  }
+  .button, .login-btn{
+    width: 250px;
+  }
+  .button{
+    top: 395px;
+    margin-top: 0;
+  }
 }

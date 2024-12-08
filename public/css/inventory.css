@@ -37,12 +37,13 @@ body {
     background-color: #f2d6d8;
     height: 100%;
     font-size: 18px;
+    display: flex;
+    flex-direction: column;
 }
 
 /* Sidebar Links */
 .sidebar a {
     justify-content: center;
-    height: 70px;
     width: 100%;
     display: block;
     color: black;
@@ -53,12 +54,14 @@ body {
 }
 
 .top{
+    display: flex;
+    flex-direction: column;
     margin-top: 50px;
+    flex: 1;
+    gap: 5px;
 }   
 
 .bot a{
-    height: 70px;
-    width: 250px;
     font-size: 20px;
 }
 
@@ -68,10 +71,11 @@ body {
 }
 
 /* Bottom Section of Sidebar */
-.sidebar .bot {
-    position: absolute;
+.bot {
+    display: flex;
+    flex-direction: column;
     bottom: 20px;
-    width: calc(100% - 20px);
+    gap: 5px;
 }
 
 /* Content Area */
@@ -80,6 +84,8 @@ body {
     flex-direction: column;
     align-items: center;
     padding: 100px;
+    flex-grow: 1;
+    overflow-y: auto;
 }
 
 .item-stocks h2{
@@ -101,11 +107,11 @@ body {
 .item-stocks{
     display: flex;
     flex-direction: column;
+    width: 100%;
 }
 
 .item{
     background-color: #ff9999;
-    width: 400px;
     height: 50px;
     justify-content: center;
     align-items: center;
@@ -124,10 +130,11 @@ body {
 
 .stocks{
     background-color: #ff9999;
-    width: 400px;
     height: 50px;
     justify-content: center;
     align-items: center;
+    display: flex;
+    flex: 1;
 }
 
 .stocks h3{
@@ -142,7 +149,7 @@ body {
 .date{
     position: absolute;
     top: 20px;
-    left: 1100px;
+    right: 10px;
     padding: 10px 20px;
     background-color: #ffafb6;
     border: none;
@@ -162,7 +169,7 @@ body {
 
 .item1, .item2, .item3, .item4, .item5, .item6, .cup2{
     background-color: #ffe3e3;
-    width: 400px;
+
     height: 50px;
     justify-content: center;
     align-items: center;
@@ -174,10 +181,11 @@ body {
 .stocks1, .stocks2, .stocks3, .stocks4, .stocks5, .stocks6, .cup3{
     background-color: #ffe3e3;
     display: flex;
-    width: 400px;
+
     height: 50px;
     justify-content: center;
     align-items: center;
+    flex: 1;
 }
 
 .hidden {
@@ -375,4 +383,32 @@ body {
     height: 55px;
     width: 45px;
 
+}
+
+
+@media (max-width: 1440px){
+    .sidebar{
+        font-size: 15px;
+        width: 200px;
+        padding: 10px;
+    }
+    .top{
+        margin-top: 0px;
+    }
+    .sidebar a{
+        font-size: 15px;
+        padding: 10px;
+    }
+    .content{
+        padding: 40px 70px;
+    }
+    .date{
+        right: 20px;
+    }
+}
+
+@media (max-width: 768px){
+    .content{
+        padding: 20px 20px;
+    }
 }
