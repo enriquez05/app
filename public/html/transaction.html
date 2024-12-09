@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test</title>
+    <title>Transaction</title>
     <link rel="stylesheet" href="../css/transaction.css" />
     <script src="../js/transaction.js" type="module"></script>
   </head>
@@ -26,9 +26,9 @@
         </div>
         <button id="hamburger" class="hamburger">&#9776;</button>
 
-        <button class="final">Finalize Sales</button>
+        <button class="final" id="finalize_sale_btn">Finalize Sales</button>
         <div class="content">
-            <div class="item">
+            <div class="item" id="item_container">
               <h3> Tap OK to add item </h3>
                   <div class="items">
                     <label for="item">Item</label>
@@ -46,7 +46,7 @@
                     <button class="okay" id="add_order_btn">OK</button>
                   </div>
             </div>
-            <div class="payment">
+            <div class="payment" id="payment_container">
               <div id="order_payment_container">
                 <div class="orders_payment">
                   <div class="orders">
@@ -78,7 +78,7 @@
                 </div>
               </div>
 
-              <div class="summary">
+              <div class="summary" id="summary_container">
                 <div class="no_total">
                   <div class="no">
                     <p id="added_items"></p>

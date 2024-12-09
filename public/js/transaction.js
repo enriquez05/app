@@ -37,6 +37,7 @@ function addEventListeners(){
     const add_vat_btn = document.getElementById("add_vat_btn");
     const total_price_value = document.getElementById("total_price_value");
     const goto_payment_btn = document.getElementById("goto_payment_btn");
+    const finalize_sale_btn = document.getElementById("finalize_sale_btn");
     
     order_payment_container.innerHTML = '';
     let currentWeight = 0;
@@ -188,5 +189,9 @@ function addEventListeners(){
         orderDetails.order_quantity = totalOrdersCount;
         const serializedOrderDetails = encodeURIComponent(JSON.stringify(orderDetails));
         window.location.href = `../html/transaction_payment.html?orderDetails=${serializedOrderDetails}`;
+    });
+
+    finalize_sale_btn.addEventListener("click", () => {
+        window.location.href = '../html/daily_sales_report.html';
     });
 }

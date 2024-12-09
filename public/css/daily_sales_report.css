@@ -117,6 +117,17 @@ body {
     /* background-color: #3333333b; */
 }
 
+.back-btn-container{
+    display: flex;
+    flex-direction: row;
+}
+
+.back-btn-container img{
+    width: 50px;
+    height: 55px;
+    cursor: pointer;
+}
+
 .date-picker-container{
     display: flex;
     flex-direction: column;
@@ -175,14 +186,7 @@ body {
     overflow-y: auto;
 }
 
-.export-btn-container{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-}
-
-#export_sale_btn,
-#daily_item_report_btn{
+#export_sale_btn{
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -199,9 +203,15 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 5px;
+    padding: 0 15%;
     /* background-color: #333; */
 }
 
+#sale_report_items_container{
+    padding: 0 15%;
+    /* background-color: #333; */
+}
 
 .title-date-container,
 .title-total-sale-container{
@@ -218,6 +228,7 @@ body {
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    gap: 5px;
     margin-top: 3px;
 }
 
@@ -231,7 +242,7 @@ body {
     flex: 1;
 }
 
-@media (max-width: 1440px) {
+@media (max-width: 1440px){
     .sidebar{
         font-size: 15px;
         width: 200px;
@@ -252,11 +263,20 @@ body {
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 768px){
+    .sidebar{
+        width: 120px;
+    }
+    .content{
+        overflow-y: auto;
+    }
+}
+  
+@media (max-width: 320px){
     .hamburger {
         display: block;
     }
-    .sidebar{
-        width: 120px;
+    .sidebar {
+        display: none;
     }
 }

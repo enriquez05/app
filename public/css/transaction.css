@@ -165,13 +165,25 @@ body {
   overflow-y: auto;
 }
 
+.summary{
+  display: flex;
+  flex-direction: column;
+}
+
 .orders_payment, .discount-offer{
   display: flex;
   flex-direction: row;
 }
 
 .grams{
-  margin-left: 150px;
+  display: flex;
+  flex-direction: row;
+  flex: 1;
+  justify-content: right;
+}
+
+.grams p {
+  text-align: right;
 }
 
 .price{

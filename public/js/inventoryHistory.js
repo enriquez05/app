@@ -8,7 +8,7 @@ import {
     doc,
     collection,
     query,
-    where,
+    orderBy,
 } from "./firebaseConfig.js";
 
 document.addEventListener("DOMContentLoaded", function() {
@@ -117,7 +117,13 @@ async function fetchInventoryAndTransactions() {
         }
     });
   
-    return inventoryItems;
+    const sortedInventoryItems = Object.entries(inventoryItems)
+    .sort((a, b) => a[1].name.localeCompare(b[1].name)) 
+    .reduce((acc, [key, value]) => {
+        acc[key] = value;
+        return acc;
+    }, {});
+    return sortedInventoryItems;
   }
 
 function renderGraph(canvasId, labels, data) {
@@ -159,12 +165,12 @@ function getLast7Days() {
     return dates;
 }
 
-// Function to format the date to 'DD/MM/YYYY'
+// Function to format the date to 'MM/DD/YYYY'
 function formatDate(date) {
     const day = String(date.getDate()).padStart(2, '0');
     const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
-    return `${day}/${month}/${year}`;
+    return `${month}/${day}/${year}`;
 }
 
 function prepareChartData(totalPurchases, selectedTimeframe){
@@ -225,7 +231,7 @@ function prepareChartData(totalPurchases, selectedTimeframe){
 
             labels.forEach((year, index) => {
                 const count = totalPurchases.filter((purchase) => {
-                    const [day, month, yearFromPurchase] = purchase.split('/').map(Number);
+                    const [month, day, yearFromPurchase] = purchase.split('/').map(Number);
                     return yearFromPurchase === year;  
                 }).length;
                 salesCount[index] += count;

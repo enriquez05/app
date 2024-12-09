@@ -11,8 +11,8 @@ body {
 }
 
 #main_div {
-  height: 720px;
-  width: 1080px;
+  height: 100vh;
+  width: 100vw;
   margin: 0 auto;
   position: relative;
 }
@@ -160,7 +160,7 @@ body {
   width: 370px;
   height: 50px;
   position: absolute;
-  top: 540px; /* Directly below qText */
+  top: 550px; /* Directly below qText */
   left: 51%;
   transform: translateX(-50%); /* Horizontal centering */
   display: flex;

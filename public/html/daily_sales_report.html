@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daily Sales Report</title>
+    <link rel="stylesheet" href="../css/daily_sales_report.css" />
+    <script src="../js/daily_sales_report.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
+</head>
+<body>
+    <div class="whole">
+        <div class="sidebar">
+
+          <div class="top">
+              <a class="transaction" href="../html/transaction.html">Transaction</a>
+              <a href="../html/sales.html">Sales</a>
+              <a href="../html/inventory.html">Inventory</a>
+              <a href="../html/invetory_history.html">Inventory History</a>
+          </div>
+          <div class="bot">
+              <a href="../html/change_pass.html">Change Password</a>
+              <a href="#" id="logout">Sign Out</a>
+          </div>
+
+        </div>
+        <button id="hamburger" class="hamburger">&#9776;</button>
+
+        <div class="content">
+            <div class="today-sale" id="today_sale_container">
+                <div class="back-date-container">
+                    <div class="back-btn-container">
+                        <img src="../img/back_button.png" id="back_btn" alt="">
+                    </div>
+                    <div class="date-picker-container">
+                        <div class="from-date-container">
+                            <p>From: </p>
+                            <input type="date" id="from_date" name="date_picker" />
+                        </div>
+                        <div class="to-date-container">
+                            <p>To: </p>
+                            <input type="date" id="to_date" name="date_picker" />
+                        </div>
+                    </div>
+                </div>
+                <div class="sale-container">
+                    <p class="sale-report-p">DAILY SALES REPORT</p>
+                    <div id="sale_table_container">
+                        <div class="table-title-container">
+                            <div class="title-date-container">
+                                <h3>DATE</h3>
+                            </div>
+                            <div class="title-total-sale-container">
+                                <h3>TOTAL SALE</h3>
+                            </div>
+                        </div>
+                        <div id="sale_report_items_container">
+                            <div class="report-item-container">
+                                <div class="report-item-date-value">
+                                    <p>DATE HERE</p>
+                                </div>
+                                <div class="report-item-sale-value">
+                                    <p>SALE HERE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="export-btn-container">
+                        <button id="export_sale_btn">Export File</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+   </div>
+</body>
+</html>

@@ -337,7 +337,8 @@ body {
     margin-bottom: 5px;
 }
 
-.added-grams input{
+.added-grams input,
+.grams input{
     width: 100%;
     text-align: center;
 }

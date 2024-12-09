@@ -1,6 +1,5 @@
 import {
     auth,
-    signInWithEmailAndPassword,
     onAuthStateChanged,
     fdb,
     getDoc,
@@ -8,16 +7,27 @@ import {
     doc,
     collection,
     updateDoc,
+    addDoc,
+    query,
+    orderBy,
 } from "./firebaseConfig.js";
 
 let currentClickDataContent = null;
 
 document.addEventListener("DOMContentLoaded", function() {
     const logout = document.getElementById("logout");
+    const current_date = document.getElementById("current_date");
+    
     logout.addEventListener("click", () => {logoutUser()});
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    current_date.textContent = `DATE: ${month}/${day}/${year}`;
+    
     checkUserLoginStatus();
     updateInventoryValues();
-    setEventListeners();
+    //setEventListeners();
 });
 
 function checkUserLoginStatus() {
@@ -52,6 +62,7 @@ function checkUserLoginStatus() {
 }
 
 function setEventListeners(){
+    console.trace("setEventListeners is initialized.");
     const item_stocks = document.getElementById("item_stocks");
     const popup1 = document.getElementById("popup1");
     const log_addition_btn = document.getElementById("log_addition_btn");
@@ -80,7 +91,8 @@ function setEventListeners(){
         currentClickDataContent = null;
     });
 
-    log_addition_btn.addEventListener("click", () => {
+    log_addition_btn.addEventListener("click", (event) => {
+        event.stopPropagation();
         popup1.style.display = "none";
         popup2.style.display = "flex";
         displayLogClickedContent();
@@ -99,12 +111,15 @@ function setEventListeners(){
 }
 
 async function updateInventoryValues(){
+    console.trace("updateInventoryValues is called.");
     const inventory_item_container = document.getElementById("inventory_item_container");
     inventory_item_container.innerHTML = "";
 
     try {
         // Query all documents in the inventory collection
-        const inventorySnapshot = await getDocs(collection(fdb, "inventory"));
+        const inventoryCollection = collection(fdb, "inventory");
+        const inventoryQuery = query(inventoryCollection, orderBy("item_name"));
+        const inventorySnapshot = await getDocs(inventoryQuery);
 
         if (!inventorySnapshot.empty) {
             let index = 1;
@@ -184,7 +199,7 @@ function displayClickedContent(dataContent){
             // update dataContent base on the new value
             dataContent.item_quantity += add_stocks;
             stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
-            updateItemInFirestore(dataContent);
+            updateItemInFirestore(dataContent, 1);
         } else {
             Swal.fire({
                 title: "Error!",
@@ -219,46 +234,127 @@ function displayLogClickedContent(){
     const addedWeightInput = document.getElementById("added_weight");
     const grams_totalWeightValue = document.getElementById("grams_totalWeightValue");
 
-    grams_weightValue.textContent = `${currentClickDataContent.item_currentWeight} G`;
-    grams_totalWeightValue.textContent = `${currentClickDataContent.item_currentWeight} G`;
+    grams_weightValue.placeholder = `${currentClickDataContent.item_currentWeight} G`;
+    grams_weightValue.value = `${currentClickDataContent.item_currentWeight}`;
+    grams_totalWeightValue.placeholder = `${currentClickDataContent.item_currentWeight} G`;
 
-    addedWeightInput.addEventListener("input", () => {
+    grams_totalWeightValue.addEventListener("input", () => {
         // Get the current total weight and the added weight
-        const currentWeight = parseInt(grams_weightValue.textContent, 10) || 0;
-        const addedWeight = parseInt(addedWeightInput.value, 10) || 0;
+        const currentWeight = parseInt(grams_weightValue.value, 10) || 0;
+        const totalWeight = parseInt(grams_totalWeightValue.value, 10) || 0;
 
         // Update the total weight dynamically
-        grams_totalWeightValue.textContent = currentWeight + addedWeight + " G";
+        addedWeightInput.value = totalWeight - currentWeight;
     });
 
     const add_weight_btn = document.getElementById("add_weight_btn");
-    add_weight_btn.addEventListener("click", () => {
-        const currentWeight = parseInt(grams_totalWeightValue.textContent, 10) || 0;
-        const itemCurrentWeight = parseInt(currentClickDataContent.item_currentWeight || 0, 10);
+    console.trace("Adding event listener to add_weight_btn");
+    add_weight_btn.addEventListener("click", (event) => {
+        event.stopPropagation(); 
+        const currentWeight = parseInt(grams_weightValue.value, 10) || 0;
+        const totalWeightValue = parseInt(grams_totalWeightValue.value || 0, 10);
 
         console.log("Current Weight:", currentWeight);
-        console.log("Item Current Weight:", itemCurrentWeight);
-        console.log("Condition Check:", currentWeight !== itemCurrentWeight && currentWeight > 0);
+        console.log("totalWeightValue:", totalWeightValue);
+        console.log("Condition Check:", currentWeight > 0);
 
         
-        if (currentWeight != itemCurrentWeight && currentWeight > 0){
-            currentClickDataContent.item_currentWeight = currentWeight;
-            grams_weightValue.textContent = `${currentClickDataContent.item_currentWeight} G`;
-            updateItemInFirestore(currentClickDataContent);
+        if (currentWeight > 0){
+            if (totalWeightValue > 0){currentClickDataContent.item_currentWeight = totalWeightValue;}
+            grams_weightValue.placeholder = `${currentClickDataContent.item_currentWeight} G`;
+            grams_weightValue.value = `${currentClickDataContent.item_currentWeight}`;
+            updateItemInFirestore(currentClickDataContent, 2);
         }
-    });
+    }, { once: true });
 }
 
-async function updateItemInFirestore(dataContent) {
+async function updateItemInFirestore(dataContent, flag) {
     try {
-        const docRef = doc(fdb, "inventory", dataContent.item_id);
-        await updateDoc(docRef, {
-            item_quantity: dataContent.item_quantity,
-            item_sellingPrice: dataContent.item_sellingPrice,
-            item_currentWeight: dataContent.item_currentWeight,
-        });
-        console.log("Inventory updated successfully.");
-        updateInventoryValues();
+        if (flag === 2){
+            // setup inventory sales
+            const now = new Date();
+            const day = String(now.getDate()).padStart(2, '0');
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const year = now.getFullYear();
+
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
+
+            let currentWeight = dataContent.item_currentWeight;
+            let currentTotalPrice = (currentWeight * dataContent.item_sellingPrice);
+
+            let orderDetails = {
+                order_list: [],
+                order_dateOrdered: `${month}/${day}/${year}`,
+                order_itemID: dataContent.item_id,
+                order_itemName: dataContent.item_name,
+                order_paymentChange: 0,
+                order_paymentMethod: 'inventory',
+                order_paymentValue: 0,
+                order_quantity: 1,
+                order_timeOrdered: `${hours}:${minutes}:${seconds}`,
+                order_totalPrice: parseInt(currentTotalPrice),
+                order_weight: dataContent.item_currentWeight,
+            };
+
+            const transactionCollection = collection(fdb, "transactions");
+            await addDoc(transactionCollection, orderDetails)
+                .then((docRef) => {
+                    console.log("Transaction added with ID:", docRef.id);
+                    Swal.fire({
+                        title: 'Success!',
+                        text: `Item added to the inventory sales.`,
+                        icon: 'success',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            updateInventoryValues();
+                        }
+                    });
+                })
+                .catch((error) => {
+                    Swal.fire({
+                        title: 'Error!',
+                        text: `Error adding transaction: ${error}`,
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            console.error("Error adding transaction:", error);
+                        }
+                    });
+                });
+        } else {
+            try {
+                const docRef = doc(fdb, "inventory", dataContent.item_id);
+                await updateDoc(docRef, {
+                    item_quantity: dataContent.item_quantity,
+                    item_sellingPrice: dataContent.item_sellingPrice,
+                    item_currentWeight: dataContent.item_currentWeight,
+                });
+                Swal.fire({
+                    title: 'Success!',
+                    text: `Item updated to the inventory.`,
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        console.log("Inventory updated successfully.");
+                        updateInventoryValues();
+                    }
+                });
+            } catch (error) {
+                console.error("Error updating inventory: ", error);
+                Swal.fire({
+                    title: "Error!",
+                    text: `Error updating inventory: ${error.message}`,
+                    icon: "error",
+                    confirmButtonText: "OK",
+                });
+            }
+            
+        }
     } catch (error) {
         console.error("Error updating inventory: ", error);
         Swal.fire({

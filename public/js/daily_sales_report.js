@@ -3,7 +3,6 @@ import {
     signInWithEmailAndPassword,
     onAuthStateChanged,
     fdb,
-    getDoc,
     getDocs,
     doc,
     where,
@@ -16,45 +15,18 @@ let currentSnapshotDisplayed = null;
 
 document.addEventListener("DOMContentLoaded", function() {
     const logout = document.getElementById("logout");
-    logout.addEventListener("click", () => {logoutUser()});
-    checkUserLoginStatus();
+    logout.addEventListener("click", () => {checkUserLoginStatus()});
     updateSalesReport();
     addEventListeners();
 });
 
-function checkUserLoginStatus() {
-    onAuthStateChanged(auth, async (user) => {
-        if (user) {
-            try {
-                // Fetch user role from Firestore
-                const userDocRef = doc(fdb, "users", user.uid);
-                const userDoc = await getDoc(userDocRef);
-
-                if (userDoc.exists()) {
-                    const role = userDoc.data().role;
-                    console.log("role: "+role);
-
-                    // Redirect or validate based on role
-                    if (role === "ADMIN") {
-                        const transaction_option = document.getElementById("transaction_option");
-                        transaction_option.style.display = 'none';
-                    }
-                } else {
-                    console.error("No user data found.");
-                }
-            } catch (error) {
-                console.error("Error fetching user role:", error);
-            }
-        } else {
-            console.log("User not logged in.");
-        }
-    });
-}
-
-function logoutUser(){
+function checkUserLoginStatus(){
     auth.signOut()
     .then(() => {
         console.log('User logged out successfully');
+        sessionStorage.clear(); 
+        localStorage.clear();
+        auth.currentUser = null;
         window.location.href = '../html/login.html'; 
     })
     .catch((error) => {
@@ -63,10 +35,18 @@ function logoutUser(){
 }
 
 function addEventListeners(){
+    const back_btn = document.getElementById("back_btn");
     const from_date = document.getElementById("from_date");
     const to_date = document.getElementById("to_date");
     const export_sale_btn = document.getElementById("export_sale_btn");
-    const daily_item_report_btn = document.getElementById("daily_item_report_btn");
+
+    const today = new Date();
+    const formattedDate = today.toISOString().split('T')[0];
+    from_date.value = formattedDate;
+
+    back_btn.addEventListener("click", () => {
+        window.history.back();
+    });
 
     from_date.addEventListener("change", () => {
         let from_date_value = document.getElementById("from_date").value;
@@ -105,10 +85,6 @@ function addEventListeners(){
     export_sale_btn.addEventListener("click", () => {
         exportDataToPDF();
     });
-
-    daily_item_report_btn.addEventListener("click", () => {
-        window.location.href = '../html/daily_sales_report.html';
-    });
 }
 
 async function updateSalesReport(){
@@ -126,8 +102,16 @@ async function updateSalesReport(){
         if (!transactionSnapshot.empty) {
             transactionSnapshot.forEach((doc) => {
                 const data = doc.data();
-                currentSnapshotDisplayed.push(data);
-                appendReportItem(data, sale_report_items_container);
+                const dataDate = new Date(data.order_dateOrdered);
+                dataDate.setHours(0, 0, 0, 0);
+
+                const todayDate = new Date();
+                todayDate.setHours(0, 0, 0, 0);
+
+                if(dataDate.getTime() === todayDate.getTime()){
+                    currentSnapshotDisplayed.push(data);
+                    appendReportItem(data, sale_report_items_container);
+                }
             });
         } else {
             Swal.fire({
@@ -214,15 +198,6 @@ function appendReportItem(data, container) {
             <p>${data.order_dateOrdered || "N/A"}</p>
         </div>
         <div class="report-item-sale-value">
-            <p>${data.order_timeOrdered || "N/A"}</p>
-        </div>
-        <div class="report-item-sale-value">
-            <p>${data.order_paymentMethod || "N/A"}</p>
-        </div>
-        <div class="report-item-sale-value">
-            <p>${data.order_weight || "N/A"} g</p>
-        </div>
-        <div class="report-item-sale-value">
             <p>₱${data.order_totalPrice || "N/A"}</p>
         </div>
     `;
@@ -235,16 +210,13 @@ function exportDataToPDF(){
 
     // Add receipt title
     doc.setFontSize(18);
-    doc.text("SALES TRANSACTION", 105, 20, { align: "center" });
+    doc.text("DAILY SALES REPORT", 105, 20, { align: "center" });
 
     // Add table headers
     doc.setFontSize(12);
     let startY = 40;
-    doc.text("DATE", 20, startY);
-    doc.text("TIME", 50, startY);
-    doc.text("MOP", 80, startY);
-    doc.text("WEIGHT (g)", 110, startY);
-    doc.text("PRICE", 150, startY);
+    doc.text("Date", 20, startY);
+    doc.text("Total Price (P)", 100, startY);
 
     // Add a horizontal line for headers
     doc.line(20, startY + 2, 190, startY + 2);
@@ -253,10 +225,7 @@ function exportDataToPDF(){
     startY += 10; // Move down for the first row
     currentSnapshotDisplayed.forEach((data, index) => {
         doc.text(data.order_dateOrdered || "N/A", 20, startY);
-        doc.text(`${data.order_timeOrdered || "N/A"}`, 50, startY);
-        doc.text(`${data.order_paymentMethod || "N/A"}`, 80, startY);
-        doc.text(`${data.order_weight || "N/A"} g`, 110, startY);
-        doc.text(`P ${data.order_totalPrice || "N/A"}`, 150, startY);
+        doc.text(`P ${data.order_totalPrice || "N/A"}`, 100, startY);
         startY += 10; // Move down for the next row
 
         // Add a new page if necessary
@@ -269,5 +238,5 @@ function exportDataToPDF(){
 
     // Save the PDF
     let today = new Date();
-    doc.save(`Transaction_${today}.pdf`);
+    doc.save(`DailySales_${today}.pdf`);
 }

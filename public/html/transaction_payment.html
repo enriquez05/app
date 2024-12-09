@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/transaction_payment.css" />
     <script src="../js/transactionPayment.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   </head>
   <body>
 
@@ -27,7 +28,7 @@
         </div>
 
         <div class="content">
-            <div class="payment">
+            <div class="payment" id="payment_container">
                 <h3 class="txt">Payment</h3>
                 <div class="total1">
                     <label for="total">Total</label>
@@ -55,6 +56,13 @@
                     <div class="pay">
                         <button id="pay_btn">PAY</button>
                     </div>
+                </div>
+            </div>
+            <div class="payment-modal" id="payment_modal">
+                <h3 class="txt">Successfully Paid</h3>
+                <div class="btns-succes">
+                    <button id="back_btn2">BACK</button>
+                    <button id="print_receipt">PRINT RECEIPT</button>
                 </div>
             </div>
         </div>

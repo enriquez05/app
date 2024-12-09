@@ -3,9 +3,11 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test</title>
+    <title>Sales</title>
     <link rel="stylesheet" href="../css/sales.css" />
     <script src="../js/sales.js" type="module"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
   </head>
   <body>
 
@@ -26,7 +28,63 @@
         </div>
 
         <div class="content">
-            
+            <div class="today-sale" id="today_sale_container">
+                <div class="date-picker-container">
+                    <div class="from-date-container">
+                        <p>From: </p>
+                        <input type="date" id="from_date" name="date_picker" />
+                    </div>
+                    <div class="to-date-container">
+                        <p>To: </p>
+                        <input type="date" id="to_date" name="date_picker" />
+                    </div>
+                </div>
+                <div class="sale-container">
+                    <p class="sale-report-p">SALES TRANSACTION</p>
+                    <div id="sale_table_container">
+                        <div class="table-title-container">
+                            <div class="title-date-container">
+                                <h3>DATE</h3>
+                            </div>
+                            <div class="title-total-sale-container">
+                                <h3>TIME</h3>
+                            </div>
+                            <div class="title-total-sale-container">
+                                <h3>MOP</h3>
+                            </div>
+                            <div class="title-total-sale-container">
+                                <h3>WEIGHT (g)</h3>
+                            </div>
+                            <div class="title-total-sale-container">
+                                <h3>PRICE</h3>
+                            </div>
+                        </div>
+                        <div id="sale_report_items_container">
+                            <div class="report-item-container">
+                                <div class="report-item-date-value">
+                                    <p>DATE HERE</p>
+                                </div>
+                                <div class="report-item-sale-value">
+                                    <p>TIME HERE</p>
+                                </div>
+                                <div class="report-item-sale-value">
+                                    <p>MOP HERE</p>
+                                </div>
+                                <div class="report-item-sale-value">
+                                    <p>WEIGHT HERE</p>
+                                </div>
+                                <div class="report-item-sale-value">
+                                    <p>PRICE HERE</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="export-btn-container">
+                        <button id="export_sale_btn">Export File</button>
+                        <button id="daily_item_report_btn">Daily Item Report</button>
+                    </div>
+                </div>
+            </div>
         </div>
    </div>
   </body>
