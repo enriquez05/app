@@ -91,6 +91,7 @@ async function updateSalesReport(){
     const sale_report_items_container = document.getElementById("sale_report_items_container");
     sale_report_items_container.innerHTML = "";
     currentSnapshotDisplayed = [];
+    const groupedSales = new Map();
 
     try {
         // Query all documents in the inventory collection
@@ -108,11 +109,31 @@ async function updateSalesReport(){
                 const todayDate = new Date();
                 todayDate.setHours(0, 0, 0, 0);
 
+                let isWithinRange = false; 
                 if(dataDate.getTime() === todayDate.getTime()){
-                    currentSnapshotDisplayed.push(data);
-                    appendReportItem(data, sale_report_items_container);
+                    isWithinRange = true;
+                }
+                
+                if (isWithinRange) {
+                    if (groupedSales.has(data.order_dateOrdered)) {
+                        // Update total price for the existing date
+                        const existingData = groupedSales.get(data.order_dateOrdered);
+                        existingData.order_totalPrice += data.order_totalPrice;
+                        console.log("existingData.order_totalPrice: ",existingData.order_totalPrice);
+                    } else {
+                        // Add new entry for this date
+                        groupedSales.set(data.order_dateOrdered, {
+                            order_dateOrdered: data.order_dateOrdered,
+                            order_totalPrice: data.order_totalPrice,
+                        });
+                        console.log("data.order_totalPrice: ",data.order_totalPrice);
+                    }
                 }
             });
+            for (const [key, value] of groupedSales) {
+                currentSnapshotDisplayed.push(value);
+                appendReportItem(value, sale_report_items_container);
+            }
         } else {
             Swal.fire({
                 title: "No Data",
@@ -137,38 +158,48 @@ function updateSalesReportTable(from_date_value, to_date_value, flag){
     const sale_report_items_container = document.getElementById("sale_report_items_container");
     sale_report_items_container.innerHTML = "";
     currentSnapshotDisplayed = [];
+    const groupedSales = new Map(); 
 
     try {
         if (!currentSnapshot.empty) {
             currentSnapshot.forEach((doc) => {
                 const data = doc.data();
                 const dataDate = new Date(data.order_dateOrdered);
+                dataDate.setHours(0, 0, 0, 0);
 
+                let isWithinRange = true; 
                 if(flag === 1){
                     let from_date = new Date(from_date_value);
                     let to_date = new Date(to_date_value);
                     from_date.setHours(0, 0, 0, 0);
                     to_date.setHours(0, 0, 0, 0);
-                    dataDate.setHours(0, 0, 0, 0);
-
-                    if (dataDate >= from_date && dataDate <= to_date) {
-                        currentSnapshotDisplayed.push(data);
-                        appendReportItem(data, sale_report_items_container);
-                    }
+                    isWithinRange = dataDate >= from_date && dataDate <= to_date;
                 } else if(flag === 2){
                     let from_date = new Date(from_date_value);
                     from_date.setHours(0, 0, 0, 0);
-                    dataDate.setHours(0, 0, 0, 0);
+                    isWithinRange = dataDate >= from_date;
+                } 
 
-                    if (dataDate >= from_date) {
-                        currentSnapshotDisplayed.push(data);
-                        appendReportItem(data, sale_report_items_container);
+                if (isWithinRange) {
+                    if (groupedSales.has(data.order_dateOrdered)) {
+                        // Update total price for the existing date
+                        const existingData = groupedSales.get(data.order_dateOrdered);
+                        existingData.order_totalPrice += data.order_totalPrice;
+                        console.log("existingData.order_totalPrice: ",existingData.order_totalPrice);
+                    } else {
+                        // Add new entry for this date
+                        groupedSales.set(data.order_dateOrdered, {
+                            order_dateOrdered: data.order_dateOrdered,
+                            order_totalPrice: data.order_totalPrice,
+                        });
+                        console.log("data.order_totalPrice: ",data.order_totalPrice);
                     }
-                } else {
-                    currentSnapshotDisplayed.push(data);
-                    appendReportItem(data, sale_report_items_container);
                 }
             });
+            for (const [key, value] of groupedSales) {
+                currentSnapshotDisplayed.push(value);
+                appendReportItem(value, sale_report_items_container);
+            }
             console.log("currentSnapshotDisplayed: ",currentSnapshotDisplayed);
         } else {
             Swal.fire({

@@ -48,6 +48,7 @@ function addEventListeners(){
     let totalOrdersCount = 0;
     let orderDetails = {
         order_list: [],
+        order_itemType: 'UTENSILS',
         order_dateOrdered: '',
         order_itemID: 'hTh5A6r3FEvnRBIDtROo',
         order_itemName: 'Cups',

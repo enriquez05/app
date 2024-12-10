@@ -286,6 +286,7 @@ async function updateItemInFirestore(dataContent, flag) {
 
             let orderDetails = {
                 order_list: [],
+                order_itemType: 'TOPPINGS',
                 order_dateOrdered: `${month}/${day}/${year}`,
                 order_itemID: dataContent.item_id,
                 order_itemName: dataContent.item_name,
