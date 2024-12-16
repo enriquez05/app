@@ -5,12 +5,21 @@ import {
     fdb,
     getDoc,
     doc,
+    rdb,
+    ref, 
+    set,
+    onValue,
+    child, 
+    get,
+    push, 
+    update,
 } from "./firebaseConfig.js";
 
 document.addEventListener("DOMContentLoaded", function() {
     const logout = document.getElementById("logout");
     logout.addEventListener("click", () => {checkUserLoginStatus()});
     addEventListeners();
+    addDataWeightListener();
 });
 
 function checkUserLoginStatus(){
@@ -194,5 +203,16 @@ function addEventListeners(){
 
     finalize_sale_btn.addEventListener("click", () => {
         window.location.href = '../html/daily_sales_report.html';
+    });
+}
+
+async function addDataWeightListener(){
+    const weight_order = document.getElementById("weight_order");
+
+    const starCountRef = ref(rdb, 'sensorval/currentweight');
+    onValue(starCountRef, (snapshot) => {
+        const data = snapshot.val();
+        weight_order.value = data;
+        weight_order.dispatchEvent(new Event('change'));
     });
 }
