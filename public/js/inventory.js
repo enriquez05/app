@@ -68,7 +68,7 @@ function setEventListeners(){
     const log_addition_btn = document.getElementById("log_addition_btn");
     const popup2 = document.getElementById("popup2");
     const toppings = document.querySelectorAll(".item1");
-    const cup2 = document.querySelectorAll(".item1");
+    const cup2 = document.querySelectorAll(".cup2");
     const back_btn1 = document.getElementById("back_btn1");
     const back_btn2 = document.getElementById("back_btn2");
 
@@ -106,6 +106,15 @@ function setEventListeners(){
     cup2.forEach((topping) => {
         topping.addEventListener("click", () => {
             // display cups
+            item_stocks.style.display = "none";
+            log_addition_btn.style.display = "none";
+            popup1.style.display = "flex";
+            
+            // Parse the data-content attribute of the clicked element
+            const dataContent = JSON.parse(topping.getAttribute("data-content").replace(/&quot;/g, '"'));
+            console.log("dataContent: "+dataContent);
+            currentClickDataContent = dataContent;
+            displayClickedContent(dataContent);
         });
     });
 }
@@ -186,47 +195,91 @@ function displayClickedContent(dataContent){
     const price_value = document.getElementById("price_value");
     const add_stocks_btn = document.getElementById("add_stocks_btn");
     const add_stocks_price_btn = document.getElementById("add_stocks_price_btn");
+    const rename_popup = document.getElementById("rename_popup");
+    const overlay = document.getElementById("overlay");
+    const rename_product = document.getElementById("rename_product");
+    const cancel_btn = document.getElementById("cancel_btn");
+    const confirm_btn = document.getElementById("confirm_btn");
 
     popup1_name.innerHTML = `<p>${dataContent.item_name}</p>`;
     stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
     price_value.innerHTML = `<p>₱${dataContent.item_sellingPrice}</p>`;
 
-    add_stocks_btn.addEventListener("click", () => {
-        const add_stocks = parseInt(document.getElementById("add_stocks").value, 10);
-        console.log("add_stocks: "+add_stocks);
+    console.log("dataContent.item_id: "+dataContent.item_id);
 
-        if (add_stocks > 0){
-            // update dataContent base on the new value
+    if(dataContent.item_id != "hTh5A6r3FEvnRBIDtROo"){
+        // Remove any existing click listeners to prevent duplicates
+        const popup1ClickListener = () => {
+            rename_popup.style.display = "flex";
+            overlay.style.display = "flex";
+            rename_product.value = dataContent.item_name;
+        };
+        popup1_name.removeEventListener("click", popup1ClickListener);
+        popup1_name.addEventListener("click", popup1ClickListener);
+    }
+    
+    const addStocksListener = () => {
+        const add_stocks = parseInt(document.getElementById("add_stocks").value, 10);
+        if (add_stocks > 0) {
             dataContent.item_quantity += add_stocks;
             stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
             updateItemInFirestore(dataContent, 1);
         } else {
             Swal.fire({
                 title: "Error!",
-                text: `Error Please enter a valid stock value: ${add_stocks}`,
+                text: `Please enter a valid stock value: ${add_stocks}`,
                 icon: "error",
                 confirmButtonText: "OK",
             });
         }
-    });
+    };
+    add_stocks_btn.replaceWith(add_stocks_btn.cloneNode(true));
+    document.getElementById("add_stocks_btn").addEventListener("click", addStocksListener);
 
-    add_stocks_price_btn.addEventListener("click", () => {
+    const addStocksPriceListener = () => {
         const add_stocks_price = parseInt(document.getElementById("add_stocks_price").value, 10);
-        console.log("add_stocks_price: " + add_stocks_price);
-
         if (add_stocks_price > 0) {
             dataContent.item_sellingPrice = add_stocks_price;
             price_value.innerHTML = `<p>₱${dataContent.item_sellingPrice}</p>`;
-            updateItemInFirestore(dataContent);
+            updateItemInFirestore(dataContent, 1);
         } else {
             Swal.fire({
                 title: "Error!",
-                text: `Error Please enter a valid price value: ${add_stocks_price}`,
+                text: `Please enter a valid price value: ${add_stocks_price}`,
                 icon: "error",
                 confirmButtonText: "OK",
             });
         }
-    });
+    };
+    add_stocks_price_btn.replaceWith(add_stocks_price_btn.cloneNode(true));
+    document.getElementById("add_stocks_price_btn").addEventListener("click", addStocksPriceListener);
+
+    const renameConfirmListener = () => {
+        const currentProductName = rename_product.value;
+        if (currentProductName.trim() !== "") {
+            dataContent.item_name = currentProductName;
+            popup1_name.innerHTML = `<p>${dataContent.item_name}</p>`;
+            updateItemInFirestore(dataContent, 1);
+            rename_popup.style.display = "none";
+            overlay.style.display = "none";
+        } else {
+            Swal.fire({
+                title: "Error!",
+                text: "Please enter a valid name.",
+                icon: "error",
+                confirmButtonText: "OK",
+            });
+        }
+    };
+    confirm_btn.replaceWith(confirm_btn.cloneNode(true));
+    document.getElementById("confirm_btn").addEventListener("click", renameConfirmListener);
+
+    const cancelListener = () => {
+        rename_popup.style.display = "none";
+        overlay.style.display = "none";
+    };
+    cancel_btn.replaceWith(cancel_btn.cloneNode(true));
+    document.getElementById("cancel_btn").addEventListener("click", cancelListener);
 }
 
 function displayLogClickedContent(){
@@ -330,6 +383,7 @@ async function updateItemInFirestore(dataContent, flag) {
             try {
                 const docRef = doc(fdb, "inventory", dataContent.item_id);
                 await updateDoc(docRef, {
+                    item_name: dataContent.item_name,
                     item_quantity: dataContent.item_quantity,
                     item_sellingPrice: dataContent.item_sellingPrice,
                     item_currentWeight: dataContent.item_currentWeight,
