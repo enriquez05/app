@@ -349,7 +349,7 @@ async function updateItemInFirestore(dataContent, flag) {
                 order_quantity: 1,
                 order_timeOrdered: `${hours}:${minutes}:${seconds}`,
                 order_totalPrice: parseInt(currentTotalPrice),
-                order_weight: dataContent.item_currentWeight,
+                order_weight: document.getElementById("added_weight").value,
             };
 
             const transactionCollection = collection(fdb, "transactions");
