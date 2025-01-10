@@ -147,7 +147,7 @@ async function updateInventoryValues(){
                     </div>
                     <div class="stocks1">
                         <div class="stocks_container">
-                            <p>${data.item_quantity || "N/A"}</p>
+                            <p>${data.item_quantity + " g" || "N/A"} </p>
                         </div>
                     </div>
                 `;
@@ -159,7 +159,7 @@ async function updateInventoryValues(){
                         </div>
                         <div class="cup3">
                             <div class="stocks_container">
-                                <p>${data.item_quantity || "N/A"}</p>
+                                <p>${data.item_quantity + " g" || "N/A"}</p>
                             </div>
                         </div>
                     `;

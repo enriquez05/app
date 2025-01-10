@@ -15,7 +15,15 @@ let currentSnapshot = null;
 document.addEventListener("DOMContentLoaded", function() {
     const logout = document.getElementById("logout");
     const currentItem = document.getElementById("currentItem");
+    const current_date = document.getElementById("current_date");
+
     logout.addEventListener("click", () => {checkUserLoginStatus()});
+    const today = new Date();
+    const day = String(today.getDate()).padStart(2, '0');
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const year = today.getFullYear();
+    current_date.textContent = `DATE: ${month}/${day}/${year}`;
+    
     updateSalesReport(currentItem.textContent.trim());
     addEventListeners();
 });
