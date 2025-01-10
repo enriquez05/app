@@ -354,18 +354,52 @@ async function updateItemInFirestore(dataContent, flag) {
 
             const transactionCollection = collection(fdb, "transactions");
             await addDoc(transactionCollection, orderDetails)
-                .then((docRef) => {
+                .then(async (docRef) => {
                     console.log("Transaction added with ID:", docRef.id);
-                    Swal.fire({
-                        title: 'Success!',
-                        text: `Item added to the inventory sales.`,
-                        icon: 'success',
-                        confirmButtonText: 'OK',
-                    }).then((result) => {
-                        if (result.isConfirmed) {
-                            updateInventoryValues();
+                    // updae the total quantity of the current item purchased
+                    try {
+                        // Reference to the inventory item document
+                        const inventoryDocRef = doc(fdb, 'inventory', orderDetails.order_itemID);
+                        
+                        // Get the current item details
+                        const inventoryDocSnapshot = await getDoc(inventoryDocRef);
+                        
+                        if (inventoryDocSnapshot.exists()) {
+                            // Get the current item quantity
+                            const currentData = inventoryDocSnapshot.data();
+                            const currentQuantity = currentData.item_quantity;
+                            const addedWeightInput = document.getElementById("added_weight").value;
+                            console.log("addedWeightInput: ",addedWeightInput);
+                
+                            // Check if sufficient inventory is available
+                            if (currentQuantity >= addedWeightInput) {
+                                // Update the item quantity
+                                const updatedQuantity = currentQuantity - addedWeightInput;
+                
+                                // Save the updated quantity
+                                await updateDoc(inventoryDocRef, { item_quantity: updatedQuantity });
+                                console.log(`Inventory updated successfully. New quantity: ${updatedQuantity}`);
+
+                                Swal.fire({
+                                    title: 'Success!',
+                                    text: `Item added to the inventory sales.`,
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                }).then((result) => {
+                                    if (result.isConfirmed) {
+                                        updateInventoryValues();
+                                        location.reload();
+                                    }
+                                });
+                            } else {
+                                console.error('Not enough inventory to fulfill the order.');
+                            }
+                        } else {
+                            console.error('Inventory item does not exist.');
                         }
-                    });
+                    } catch (error) {
+                        console.error('Error updating inventory:', error);
+                    }
                 })
                 .catch((error) => {
                     Swal.fire({
