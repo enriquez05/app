@@ -193,9 +193,11 @@ body {
 .btn{
     display: flex;
     flex-direction: row;
+    gap: 10px;
 }
 
-.btn a{
+.btn a, 
+.btn p{
     background-color: #ff9999;
     margin-top: 50px;
     bottom: 150px;
@@ -207,6 +209,7 @@ body {
     font-size: 16px;
     text-decoration: none;
     color: black;
+    cursor: pointer;
 }
 
 .popup1, .popup2{
@@ -313,6 +316,7 @@ body {
     margin-top: 20px;
     border-radius: 10px;
     font-weight: 600;
+    cursor: pointer;
 }
 
 .weight-title, .added-title{
@@ -370,18 +374,45 @@ body {
     margin-bottom: 50px;
     font-weight: 600;
 }
+
+.buttons-container{
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+}
 .back{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
     width: 100%;
     border: none;
     background-color: transparent;
 }
 
-.back img{
-    display: flex;
-    flex-direction: column;
+#back_btn1 img{
     height: 55px;
     width: 45px;
+    cursor: pointer;
+}
 
+#back_btn2 img{
+    height: 55px;
+    width: 45px;
+    cursor: pointer;
+}
+
+#back_btn3 img{
+    height: 55px;
+    width: 45px;
+    cursor: pointer;
+}
+
+#delete_item_btn1 img{
+    display: flex;
+    justify-content: right;
+    height: 45px;
+    width: 45px;
+    cursor: pointer;
 }
 
 #rename_popup{
@@ -436,6 +467,43 @@ body {
     background-color: #ff9999;
 }
 
+.addItemPopup{
+    display: none;
+    flex-direction: column;
+    width: 500px;
+    padding: 20px;
+    border-radius: 20px;
+    height: 700px; /* palitan mo nalang to */
+    background-color: white;
+    align-items: center;
+}
+
+.add-form-text-input-container{
+    display: flex;
+    flex-direction: row;
+    gap: 5px;
+    width: 100%;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.add-form-text-input-container input{
+    width: 50%;
+}
+
+.add-form-title{
+    display: flex;
+    flex-direction: column;
+    font-size: 26px;
+    height: 50px;
+    width: 300px;
+    background-color: #f7838d;
+    border-radius: 10px;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
 
 @media (max-width: 1440px){
     .sidebar{

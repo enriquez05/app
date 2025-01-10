@@ -10,6 +10,7 @@ import {
     addDoc,
     query,
     orderBy,
+    deleteDoc,
 } from "./firebaseConfig.js";
 
 let currentClickDataContent = null;
@@ -71,6 +72,9 @@ function setEventListeners(){
     const cup2 = document.querySelectorAll(".cup2");
     const back_btn1 = document.getElementById("back_btn1");
     const back_btn2 = document.getElementById("back_btn2");
+    const back_btn3 = document.getElementById("back_btn3");
+    const add_item_button = document.getElementById("add_item_button");
+    const addItemPopup = document.getElementById("addItemPopup");
 
     toppings.forEach((topping) => {
         topping.addEventListener("click", () => {
@@ -103,6 +107,12 @@ function setEventListeners(){
         popup2.style.display = "none";
     });
 
+    back_btn3.addEventListener("click", () => {
+        item_stocks.style.display = "flex";
+        addItemPopup.style.display = "none";
+        currentClickDataContent = null;
+    });
+
     cup2.forEach((topping) => {
         topping.addEventListener("click", () => {
             // display cups
@@ -116,6 +126,12 @@ function setEventListeners(){
             currentClickDataContent = dataContent;
             displayClickedContent(dataContent);
         });
+    });
+
+    add_item_button.addEventListener("click", () => {
+        item_stocks.style.display = "none";
+        addItemPopup.style.display = "flex";
+        displayAddItemForm();
     });
 }
 
@@ -200,6 +216,7 @@ function displayClickedContent(dataContent){
     const rename_product = document.getElementById("rename_product");
     const cancel_btn = document.getElementById("cancel_btn");
     const confirm_btn = document.getElementById("confirm_btn");
+    const delete_item_btn1 = document.getElementById("delete_item_btn1");
 
     popup1_name.innerHTML = `<p>${dataContent.item_name}</p>`;
     stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
@@ -280,6 +297,41 @@ function displayClickedContent(dataContent){
     };
     cancel_btn.replaceWith(cancel_btn.cloneNode(true));
     document.getElementById("cancel_btn").addEventListener("click", cancelListener);
+
+    const removeListener = async () => {
+        try {
+            // Reference to the specific item document
+            const removeItemReference = doc(fdb, "inventory", dataContent.item_id);
+    
+            // Delete the document
+            await deleteDoc(removeItemReference);
+    
+            console.log(`Item with ID ${dataContent.item_id} successfully removed from the inventory.`);
+    
+            // Optionally, show a success message or update the UI
+            Swal.fire({
+                title: 'Item Removed!',
+                text: `The item ${dataContent.item_name} has been removed successfully.`,
+                icon: 'success',
+                confirmButtonText: 'OK',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    updateInventoryValues();
+                    location.reload();
+                }
+            });
+        } catch (error) {
+            console.error("Error removing item:", error);
+            Swal.fire({
+                title: 'Error!',
+                text: `Failed to remove item: ${error.message}`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
+        }
+    };
+    delete_item_btn1.replaceWith(delete_item_btn1.cloneNode(true));
+    document.getElementById("delete_item_btn1").addEventListener("click", removeListener);
 }
 
 function displayLogClickedContent(){
@@ -453,6 +505,88 @@ async function updateItemInFirestore(dataContent, flag) {
             confirmButtonText: "OK",
         });
     }
+}
+
+function displayAddItemForm(){
+    const add_new_item_button = document.getElementById("add_new_item_button");
+    
+    add_new_item_button.addEventListener("click", async () => {
+        const add_item_name_value = document.getElementById("add_item_name_value").value;
+        const add_item_quantity_value = document.getElementById("add_item_quantity_value").value;
+        const add_item_sellingPrice_value = document.getElementById("add_item_sellingPrice_value").value;
+        const add_item_currentWeight_value = document.getElementById("add_item_currentWeight_value").value;
+        let errorMessage = "";
+
+        if (add_item_name_value.length === 0) {
+            errorMessage += "Please input a valid item name.\n";
+        }else if (add_item_quantity_value <= 0 || isNaN(add_item_quantity_value)) {
+            errorMessage += "Please input a valid item quantity.\n";
+        }else if (add_item_sellingPrice_value <= 0 || isNaN(add_item_sellingPrice_value)) {
+            errorMessage += "Please input a valid item selling price.\n";
+        }else if (add_item_currentWeight_value <= 0 || isNaN(add_item_currentWeight_value)) {
+            errorMessage += "Please input a valid item current weight.\n";
+        }
+    
+        // If there's an error, show a Swal alert
+        if (errorMessage) {
+            Swal.fire({
+                title: 'Error!',
+                text: `${errorMessage}`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    console.error("Error adding transaction:", errorMessage);
+                }
+            });
+        } else {
+            const itemDetails = {
+                item_currentWeight: add_item_currentWeight_value,
+                item_id: "",
+                item_name: add_item_name_value,
+                item_purchaseCount: 0,
+                item_quantity: add_item_quantity_value,
+                item_sellingPrice: add_item_sellingPrice_value,
+                item_totalSales: 0,
+                item_type: "TOPPINGS",
+            }
+
+            try {
+                // Reference to the inventory collection
+                const inventoryReference = collection(fdb, "inventory");
+        
+                // Add the itemDetails to the Firestore collection
+                const docRef = await addDoc(inventoryReference, itemDetails);
+        
+                console.log("Item added to inventory with ID:", docRef.id);
+        
+                // Update the item_id field with the generated document ID
+                const itemDocRef = doc(fdb, "inventory", docRef.id);
+                await updateDoc(itemDocRef, { item_id: docRef.id });
+        
+                console.log("Item ID updated successfully.");
+                Swal.fire({
+                    title: 'Success!',
+                    text: 'Item added to inventory successfully.',
+                    icon: 'success',
+                    confirmButtonText: 'OK',
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        updateInventoryValues();
+                        location.reload();
+                    }
+                });
+            } catch (error) {
+                console.error("Error adding item to inventory:", error);
+                Swal.fire({
+                    title: 'Error!',
+                    text: `Failed to add item to inventory: ${error.message}`,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
+        }
+    });
 }
 
 function logoutUser(){
