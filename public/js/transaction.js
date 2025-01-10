@@ -52,6 +52,7 @@ function addEventListeners() {
     const total_price_value = document.getElementById("total_price_value");
     const goto_payment_btn = document.getElementById("goto_payment_btn");
     const finalize_sale_btn = document.getElementById("finalize_sale_btn");
+    const pricePerGram = document.getElementById("price_per_gram");
 
     order_payment_container.innerHTML = '';
     let currentWeight = 0;
@@ -81,8 +82,16 @@ function addEventListeners() {
     // then compute the price when data changes 
     // then update the values
     weight_order.addEventListener("change", () => {
+        const currentPricePerGram = document.getElementById("price_per_gram").value;
         currentWeight = parseFloat(weight_order.value);
-        currentTotalPrice = (currentWeight * 35) / 100;
+        currentTotalPrice = (currentWeight * currentPricePerGram) / 100;
+        price_order.value = currentTotalPrice.toFixed(2);
+    });
+
+    pricePerGram.addEventListener("change", () => {
+        const currentPricePerGram = document.getElementById("price_per_gram").value;
+        currentWeight = parseFloat(weight_order.value);
+        currentTotalPrice = (currentWeight * currentPricePerGram) / 100;
         price_order.value = currentTotalPrice.toFixed(2);
     });
 

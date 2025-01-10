@@ -138,6 +138,10 @@ body {
   text-align: right;
 }
 
+.price-per-gram input{
+  text-align: right;
+}
+
 .total input{
   text-align: right;
 }

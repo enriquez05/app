@@ -7,6 +7,7 @@ import {
     doc,
     collection,
     addDoc,
+    updateDoc,
 } from "./firebaseConfig.js";
 
 import { connectToBluetoothPrinter, updateStatus, currentDevice, printCharacteristic,reconnectAutomatically } from './bluetooth.js';
@@ -117,10 +118,44 @@ function retrieveOrderDetails() {
 
             // Add the orderDetails to Firestore
             addDoc(transactionCollection, orderDetails)
-                .then((docRef) => {
+                .then(async (docRef) => {
                     console.log("Transaction added with ID:", docRef.id);
-                    // call function for popup success modal
-                    showSuccessModal(orderDetails, docRef.id);
+                    // update the number of items in the inventory
+                    // 1. get the item in the inventory 
+                    // 2. update the 'item_quantity' inventory field by inventoryItem.item_quantity -= orderDetails.order_quantity
+                    // 3. save the current value of the inventory item quantity
+                    try {
+                        // Reference to the inventory item document
+                        const inventoryDocRef = doc(fdb, 'inventory', orderDetails.order_itemID);
+                        
+                        // Get the current item details
+                        const inventoryDocSnapshot = await getDoc(inventoryDocRef);
+                        
+                        if (inventoryDocSnapshot.exists()) {
+                            // Get the current item quantity
+                            const currentData = inventoryDocSnapshot.data();
+                            const currentQuantity = currentData.item_quantity;
+                
+                            // Check if sufficient inventory is available
+                            if (currentQuantity >= orderDetails.order_quantity) {
+                                // Update the item quantity
+                                const updatedQuantity = currentQuantity - orderDetails.order_quantity;
+                
+                                // Save the updated quantity
+                                await updateDoc(inventoryDocRef, { item_quantity: updatedQuantity });
+                                console.log(`Inventory updated successfully. New quantity: ${updatedQuantity}`);
+
+                                // Show success modal
+                                showSuccessModal(orderDetails, docRef.id);
+                            } else {
+                                console.error('Not enough inventory to fulfill the order.');
+                            }
+                        } else {
+                            console.error('Inventory item does not exist.');
+                        }
+                    } catch (error) {
+                        console.error('Error updating inventory:', error);
+                    }
                 })
                 .catch((error) => {
                     Swal.fire({
