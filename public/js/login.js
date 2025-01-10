@@ -7,7 +7,7 @@ import {
     doc,
 } from './firebaseConfig.js';
 
-let selectedRole = ""; 
+let selectedRole = "";
 let unsubscribe;
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -24,8 +24,8 @@ function checkUserLoginStatus() {
 
                 if (userDoc.exists()) {
                     const role = userDoc.data().role;
-                    console.log("role: "+role);
-                    console.log("selectedRole: "+selectedRole);
+                    console.log("role: " + role);
+                    console.log("selectedRole: " + selectedRole);
 
                     // Redirect or validate based on role
                     if (selectedRole != "" && role === selectedRole) {
@@ -41,7 +41,7 @@ function checkUserLoginStatus() {
                             auth.signOut();
                             initializeLoginEvent();
                         });
-                    } else {initializeLoginEvent();}
+                    } else { initializeLoginEvent(); }
                 } else {
                     console.error("No user data found.");
                 }
@@ -77,15 +77,17 @@ function initializeLoginEvent() {
                     // Fetch user role from Firestore
                     const userDocRef = doc(fdb, "users", user.uid);
                     const userDoc = await getDoc(userDocRef);
-    
+
                     if (userDoc.exists()) {
                         const role = userDoc.data().role;
-                        console.log("role: "+role);
-                        console.log("selectedRole: "+selectedRole);
-    
+                        console.log("role: " + role);
+                        console.log("selectedRole: " + selectedRole);
+
+
                         // Redirect or validate based on role
                         if (selectedRole != "" && role === selectedRole) {
                             handleRoleRedirection(role, user.email);
+
                         } else if (selectedRole != "" && role != selectedRole) {
                             Swal.fire({
                                 title: 'Error!',
@@ -99,7 +101,7 @@ function initializeLoginEvent() {
                                     initializeLoginEvent();
                                 }
                             });
-                        } else {initializeLoginEvent();}
+                        } else { initializeLoginEvent(); }
                     } else {
                         console.error("No user data found.");
                     }
@@ -131,7 +133,7 @@ function handleRoleRedirection(role, email) {
             icon: 'success',
             confirmButtonText: 'OK',
         }).then((result) => {
-            if (result.isConfirmed) { 
+            if (result.isConfirmed) {
                 console.log(`Redirecting to: ${rolePages[role]}`);
                 window.location.href = rolePages[role];
             }
@@ -149,3 +151,4 @@ function handleRoleRedirection(role, email) {
         });
     }
 }
+

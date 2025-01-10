@@ -4,22 +4,32 @@ import {
     onAuthStateChanged,
     fdb,
     getDoc,
-    getDocs,
     doc,
     collection,
     addDoc,
 } from "./firebaseConfig.js";
 
-document.addEventListener("DOMContentLoaded", function() {
+import { connectToBluetoothPrinter, updateStatus, currentDevice, printCharacteristic,reconnectAutomatically } from './bluetooth.js';
+
+document.addEventListener("DOMContentLoaded", function () {
     const logout = document.getElementById("logout");
     const back_btn1 = document.getElementById("back_btn1");
     const back_btn2 = document.getElementById("back_btn2");
-    logout.addEventListener("click", () => {logoutUser()});
+    logout.addEventListener("click", () => { logoutUser() });
+
+
     back_btn1.addEventListener("click", () => {window.location.href="/html/transaction.html"});
     back_btn2.addEventListener("click", () => {window.location.href="/html/transaction.html"});
+
+    
     checkUserLoginStatus();
+
+    reconnectAutomatically();
+    
     retrieveOrderDetails();
 });
+
+
 
 function checkUserLoginStatus() {
     onAuthStateChanged(auth, async (user) => {
@@ -31,7 +41,7 @@ function checkUserLoginStatus() {
 
                 if (userDoc.exists()) {
                     const role = userDoc.data().role;
-                    console.log("role: "+role);
+                    console.log("role: " + role);
 
                     // Redirect or validate based on role
                     if (role === "ADMIN") {
@@ -45,14 +55,14 @@ function checkUserLoginStatus() {
                 console.error("Error fetching user role:", error);
             }
         } else {
-            auth.signOut()
+            auth.signOut();
             console.log("User not logged in.");
-            window.location.href = '../html/login.html'; 
+            window.location.href = '../html/login.html';
         }
     });
 }
 
-function retrieveOrderDetails(){
+function retrieveOrderDetails() {
     const urlParams = new URLSearchParams(window.location.search);
     const orderDetailsString = urlParams.get("orderDetails");
     let orderDetails = null;
@@ -71,7 +81,7 @@ function retrieveOrderDetails(){
     let totalPrice = orderDetails.order_totalPrice.toFixed(2);
     let currentChange = 0;
     let currentPaymentValue = 0;
-    total.value = totalPrice
+    total.value = totalPrice;
 
     pvalue.addEventListener("input", () => {
         currentPaymentValue = document.getElementById("pvalue").value;
@@ -84,21 +94,21 @@ function retrieveOrderDetails(){
         const paymentValue = parseFloat(currentPaymentValue);
         const priceValue = parseFloat(totalPrice);
 
-        if (paymentValue >= priceValue){
+        if (paymentValue >= priceValue) {
             const transactionCollection = collection(fdb, "transactions");
             orderDetails.order_paymentChange = currentChange;
             orderDetails.order_paymentMethod = payment_method.value;
             orderDetails.order_paymentValue = paymentValue;
-            
+
             // Get the current date and time
             const now = new Date();
-    
+
             // Format the date as DD/MM/YYYY
             const day = String(now.getDate()).padStart(2, '0');
             const month = String(now.getMonth() + 1).padStart(2, '0');
             const year = now.getFullYear();
             orderDetails.order_dateOrdered = `${month}/${day}/${year}`;
-    
+
             // Format the time as HH:mm:ss (24-hour format)
             const hours = String(now.getHours()).padStart(2, '0');
             const minutes = String(now.getMinutes()).padStart(2, '0');
@@ -129,7 +139,7 @@ function retrieveOrderDetails(){
     });
 }
 
-function showSuccessModal(orderDetails, id){
+function showSuccessModal(orderDetails, id) {
     const payment_container = document.getElementById("payment_container");
     const payment_modal = document.getElementById("payment_modal");
     const print_receipt = document.getElementById("print_receipt");
@@ -137,51 +147,110 @@ function showSuccessModal(orderDetails, id){
     payment_container.style.display = 'none';
     payment_modal.style.display = 'flex';
 
-    print_receipt.addEventListener("click", () => {
-        // create a pdf file with the order details and the order id
-        const { jsPDF } = window.jspdf;
-        const doc = new jsPDF();
-
-        // Add receipt title
-        doc.setFontSize(18);
-        doc.text("Receipt", 105, 20, { align: "center" });
-
-        // Add Order ID
-        doc.setFontSize(12);
-        doc.text(`Order ID: ${id}`, 20, 40);
-
-        // Add Order Details
-        doc.text("Order Details:", 20, 50);
-        let y = 60; // Start position for order details
-        orderDetails.order_list.forEach((item, index) => {
-            doc.text(`${index + 1}. ${item.currentWeight}g - P${item.currentTotalPrice}`, 20, y);
-            y += 10;
-        });
-
-        // Add Total Price
-        doc.text(`Total Price: P${orderDetails.order_paymentValue}`, 20, y + 10);
-
-        // Add Payment Method
-        doc.text(`Payment Method: ${orderDetails.order_paymentMethod}`, 20, y + 20);
-
-        // Add Footer (Date and Time)
-        doc.setFontSize(10);
-        const now = new Date();
-        doc.text(`Date: ${orderDetails.order_dateOrdered}`, 20, y + 40);
-        doc.text(`Time: ${orderDetails.order_timeOrdered}`, 20, y + 50);
-
-        // Save the PDF
-        doc.save(`Receipt_${id}.pdf`);
+    print_receipt.addEventListener("click", async () => {
+        // Check if Bluetooth device is connected
+        if (currentDevice) {
+            printReceiptViaBluetooth(orderDetails, id);
+        } else {
+            console.error("No Bluetooth device connected.");
+            alert("Please connect to a Bluetooth printer first.");
+        }
+        // if (!device.gatt.connected) {
+        //     await device.gatt.connect();
+        // }
     });
 }
 
-function logoutUser(){
+async function printReceiptViaBluetooth(orderDetails, id) {
+    if (!printCharacteristic) {
+        console.error("No writable Bluetooth characteristic available.");
+        updateStatus("No printer connected.");
+        return;
+    }
+
+    // Check if the characteristic is writable
+    if (!printCharacteristic.writeValue) {
+        console.error("Characteristic does not support write operations.");
+        updateStatus("Printer doesn't support write operations.");
+        return;
+    }
+
+    // Continue with printing if the characteristic is valid
+
+    const receiptData = buildReceiptData(orderDetails, id);
+    const printData = new Uint8Array([0x1B, 0x40, 0x1B, 0x61, 0x01, ...new TextEncoder().encode(receiptData), 0x0A]);
+
+    try {
+        await printCharacteristic.writeValue(printData);
+        console.log('Receipt sent to printer.');
+        updateStatus('Printing receipt...');
+        setTimeout(() => {
+            updateStatus('Ready to print');
+        }, 2000);
+    } catch (error) {
+        console.error('Error printing receipt:', error);
+        updateStatus(`Failed to print: ${error.message}`);
+    }
+}
+function buildReceiptData(orderDetails, id) {
+    let receiptData = "Receipt\n";
+    receiptData += `Order ID: ${id}\n\n`;  // Added space after Order ID
+    receiptData += "Order Details:\n";
+
+    let totalPrice = 0; // To calculate the total price
+
+    // Loop through order items and calculate total
+    orderDetails.order_list.forEach((item, index) => {
+        receiptData += `${index + 1}. ${item.currentWeight}g - P${item.currentTotalPrice}\n`;
+        totalPrice += item.currentTotalPrice; // Sum up the total price
+    });
+
+    receiptData += `\nTotal Price: P${totalPrice}\n\n`;  // Added space after Order Details
+
+    // Calculate balance
+    const cash = orderDetails.order_paymentValue;
+    const balance = totalPrice - cash;
+
+    receiptData += `Cash: P${cash}\n`;
+    receiptData += `Payment Method: ${orderDetails.order_paymentMethod}\n`;
+
+
+    // Add the balance (remaining amount) to the receipt
+    if (balance > 0) {
+        receiptData += `Balance: P${balance}\n\n\n`; // Customer owes this amount
+    } else if (balance < 0) {
+        receiptData += `Change: P${Math.abs(balance)}\n\n\n`; // Customer gets this amount as change
+    } else {
+        receiptData += "Exact payment received. No balance.\n\n\n"; // No remaining balance
+    }
+    receiptData += `Date: ${orderDetails.order_dateOrdered}\n\n\n`;
+
+
+    receiptData += `Time: ${orderDetails.order_timeOrdered}\n\n\n`;  // Added space before Balance/Change
+
+
+    return receiptData;
+}
+function logoutUser() {
     auth.signOut()
-    .then(() => {
-        console.log('User logged out successfully');
-        window.location.href = '../html/login.html'; 
-    })
-    .catch((error) => {
-        console.error('Error logging out:', error);
-    });
+        .then(() => {
+            console.log('User logged out successfully');
+            window.location.href = '../html/login.html';
+        })
+        .catch((error) => {
+            console.error('Error logging out:', error);
+        });
 }
+
+document.getElementById('connect_btn').addEventListener('click', connectToBluetoothPrinter);
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Check if there is a saved Bluetooth device in localStorage
+    const storedDevice = localStorage.getItem('bluetoothDevice');
+    if (storedDevice) {
+        const deviceInfo = JSON.parse(storedDevice);
+        // reconnectToBluetoothDevice(deviceInfo);
+        reconnectAutomatically();
+    }
+    // Continue with your other initializations
+});

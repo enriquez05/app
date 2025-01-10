@@ -6,37 +6,42 @@ import {
     getDoc,
     doc,
     rdb,
-    ref, 
+    ref,
     set,
     onValue,
-    child, 
+    child,
     get,
-    push, 
+    push,
     update,
 } from "./firebaseConfig.js";
 
-document.addEventListener("DOMContentLoaded", function() {
+import { connectToBluetoothPrinter, updateStatus, currentDevice, printCharacteristic,reconnectAutomatically } from './bluetooth.js';
+
+
+document.addEventListener("DOMContentLoaded", function () {
     const logout = document.getElementById("logout");
-    logout.addEventListener("click", () => {checkUserLoginStatus()});
+    logout.addEventListener("click", () => { checkUserLoginStatus() });
     addEventListeners();
     addDataWeightListener();
+    reconnectAutomatically();
+
 });
 
-function checkUserLoginStatus(){
+function checkUserLoginStatus() {
     auth.signOut()
-    .then(() => {
-        console.log('User logged out successfully');
-        sessionStorage.clear(); 
-        localStorage.clear();
-        auth.currentUser = null;
-        window.location.href = '../html/login.html'; 
-    })
-    .catch((error) => {
-        console.error('Error logging out:', error);
-    });
+        .then(() => {
+            console.log('User logged out successfully');
+            sessionStorage.clear();
+            localStorage.clear();
+            auth.currentUser = null;
+            window.location.href = '../html/login.html';
+        })
+        .catch((error) => {
+            console.error('Error logging out:', error);
+        });
 }
 
-function addEventListeners(){
+function addEventListeners() {
     const weight_order = document.getElementById("weight_order");
     const price_order = document.getElementById("price_order");
     const add_order_btn = document.getElementById("add_order_btn");
@@ -47,7 +52,7 @@ function addEventListeners(){
     const total_price_value = document.getElementById("total_price_value");
     const goto_payment_btn = document.getElementById("goto_payment_btn");
     const finalize_sale_btn = document.getElementById("finalize_sale_btn");
-    
+
     order_payment_container.innerHTML = '';
     let currentWeight = 0;
     let currentTotalPrice = 0;
@@ -70,19 +75,19 @@ function addEventListeners(){
         order_weight: 0,
     };
 
-    console.log("orderDetails: "+orderDetails);
+    console.log("orderDetails: " + orderDetails);
 
     // set up and change data listener from firestore 
     // then compute the price when data changes 
     // then update the values
     weight_order.addEventListener("change", () => {
-        currentWeight = parseFloat(weight_order.value); 
+        currentWeight = parseFloat(weight_order.value);
         currentTotalPrice = (currentWeight * 35) / 100;
         price_order.value = currentTotalPrice.toFixed(2);
     });
 
     add_order_btn.addEventListener("click", () => {
-        if(currentTotalPrice > 0){
+        if (currentTotalPrice > 0) {
             const uniqueId = Date.now();
             const itemDiv = document.createElement("div");
             itemDiv.classList.add(`orders_payment`);
@@ -90,7 +95,7 @@ function addEventListeners(){
             subtotalPrice += currentTotalPrice;
             finalTotalPrice += currentTotalPrice;
             finalTotalWeight += currentWeight;
-    
+
             itemDiv.innerHTML = `
                 <div class="orders">
                     <p>1 Cup</p>
@@ -114,7 +119,7 @@ function addEventListeners(){
             });
             console.log("orderDetails:", orderDetails);
         }
-        
+
         totalOrdersCount = document.querySelectorAll(".orders_payment").length;
         added_items.textContent = `${totalOrdersCount} items`;
         subtotal_value.textContent = `Subtotal: ₱${subtotalPrice.toFixed(2)}`;
@@ -127,9 +132,9 @@ function addEventListeners(){
             const itemToRemove = event.target.closest(".orders_payment");
             const itemPrice = event.target.closest(".orders_payment").querySelector(".price p").textContent;
             const itemGrams = event.target.closest(".orders_payment").querySelector(".grams p").textContent;
-            console.log("itemPrice: "+itemPrice);
-            console.log("itemGrams: "+itemGrams);
-            
+            console.log("itemPrice: " + itemPrice);
+            console.log("itemGrams: " + itemGrams);
+
             const itemPriceNumber = parseFloat(itemPrice.replace(/[^\d.]/g, ''));
             const itemGramsValue = parseFloat(itemGrams.replace(/[^\d.]/g, ''));
             console.log("itemPrice (number): " + itemPriceNumber);
@@ -155,8 +160,8 @@ function addEventListeners(){
         if (event.target.closest(".remove-item-d")) {
             const itemToRemove = event.target.closest(".discount-offer");
             const itemPrice = event.target.closest(".discount-offer").querySelector(".price p").textContent;
-            console.log("itemPrice: "+itemPrice);
-            
+            console.log("itemPrice: " + itemPrice);
+
             const itemPriceNumber = parseFloat(itemPrice.replace(/[^\d.]/g, ''));
             console.log("itemPrice (number): " + itemPriceNumber);
 
@@ -206,7 +211,7 @@ function addEventListeners(){
     });
 }
 
-async function addDataWeightListener(){
+async function addDataWeightListener() {
     const weight_order = document.getElementById("weight_order");
 
     const starCountRef = ref(rdb, 'sensorval/currentweight');
@@ -216,3 +221,18 @@ async function addDataWeightListener(){
         weight_order.dispatchEvent(new Event('change'));
     });
 }
+
+
+
+document.getElementById('bluetooth').addEventListener('click', connectToBluetoothPrinter);
+
+document.addEventListener("DOMContentLoaded", function () {
+    // Check if there is a saved Bluetooth device in localStorage
+    const storedDevice = localStorage.getItem('bluetoothDevice');
+    if (storedDevice) {
+        const deviceInfo = JSON.parse(storedDevice);
+        // reconnectToBluetoothDevice(deviceInfo);
+        reconnectAutomatically();
+    }
+    // Continue with your other initializations
+});

@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Test</title>
@@ -8,14 +9,15 @@
     <script src="../js/transactionPayment.js" type="module"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.4.0/jspdf.umd.min.js"></script>
-  </head>
-  <body>
+</head>
 
-   <div class="whole">
+<body>
+
+    <div class="whole">
         <div class="sidebar">
 
             <div class="top">
-                <a class="transaction"  href="/html/transaction.html" id="transaction_option">Transaction</a>
+                <a class="transaction" href="/html/transaction.html" id="transaction_option">Transaction</a>
                 <a href="../html/sales.html">Sales</a>
                 <a href="../html/inventory.html">Inventory</a>
                 <a href="../html/invetory_history.html">Inventory History</a>
@@ -60,12 +62,21 @@
             </div>
             <div class="payment-modal" id="payment_modal">
                 <h3 class="txt">Successfully Paid</h3>
+
                 <div class="btns-succes">
                     <button id="back_btn2">BACK</button>
                     <button id="print_receipt">PRINT RECEIPT</button>
+
                 </div>
+
+                <button id="connect_btn">Connect</button>
+                <div id="status"></div>
+
+
+
             </div>
         </div>
-   </div>
-  </body>
+    </div>
+</body>
+
 </html>

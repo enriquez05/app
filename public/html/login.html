@@ -1,90 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Test</title>
-    <link rel="stylesheet" href="../css/login.css" />
-    <script src="../js/login.js" type="module"></script>
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-  </head>
-  <body>
 
-    <div id="main_div">
-      <div id="log_text_div">
-        <p>L O G I N</p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LOGIN</title>
+  <link rel="stylesheet" href="../css/login.css" />
+  <script src="../js/login.js" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+
+<body>
+
+  <div id="main_div">
+    <div id="log_text_div">
+      <p>L O G I N</p>
+    </div>
+
+    <h1 class="qText"> admin or employee? </h1>
+
+    <div class="dropdown">
+      <div class="select">
+        <span class="selected" id="role_selected"> Admin </span>
+        <div class="caret"></div>
       </div>
+      <ul class="menu">
+        <li class="active"> Admin </li>
+        <li> Employee </li>
+      </ul>
+    </div>
 
-      <h1 class="qText"> admin or employee? </h1>
-
-      <div class="dropdown">
-        <div class="select">
-          <span class = "selected" id="role_selected"> Admin </span>
-          <div class="caret"></div>
-        </div>
-        <ul class="menu">
-          <li class="active"> Admin </li>
-          <li> Employee </li>
-        </ul>
+    <div class="username_pass">
+      <div class="username">
+        <label for="username">username</label>
+        <input type="text" id="username" name="username" placeholder="example@pos.com">
       </div>
-
-      <div class="username_pass">
-        <div class="username">
-          <label for="username">username</label>
-          <input type="text" id="username" name="username" placeholder="example@pos.com">
-        </div>
-        <div class="password">
-          <label for="password">password</label>
-          <input type="password" id="password" name="password">
-        </div>
+      <div class="password">
+        <label for="password">password</label>
+        <input type="password" id="password" name="password">
       </div>
+    </div>
 
-      <div class="button">
-        <a href="#">
-          <button class="login-btn" id="login_button"> LOGIN </button>
-        </a>
-        
-        <!-- <a href="../html/transaction.html">
+    <div class="button">
+      <a href="#">
+        <button class="login-btn" id="login_button"> LOGIN </button>
+      </a>
+
+      <!-- <a href="../html/transaction.html">
           <button class="login-btn"> LOGIN </button>
         </a> -->
-      </div>
-          
-
     </div>
-  </body>
+
+
+  </div>
+</body>
+
 </html>
 
 <script>
-const dropdowns = document.querySelectorAll('.dropdown');
+  const dropdowns = document.querySelectorAll('.dropdown');
 
-dropdowns.forEach(dropdown => {
-  const select = dropdown.querySelector('.select'); // Fixed selector
-  const caret = dropdown.querySelector('.caret'); // Fixed selector
-  const menu = dropdown.querySelector('.menu'); // Fixed selector
-  const options = dropdown.querySelectorAll('.menu li'); // Select all li elements
-  const selected = dropdown.querySelector('.selected'); // Fixed selector
+  dropdowns.forEach(dropdown => {
+    const select = dropdown.querySelector('.select'); // Fixed selector
+    const caret = dropdown.querySelector('.caret'); // Fixed selector
+    const menu = dropdown.querySelector('.menu'); // Fixed selector
+    const options = dropdown.querySelectorAll('.menu li'); // Select all li elements
+    const selected = dropdown.querySelector('.selected'); // Fixed selector
 
-  // Toggle dropdown open/close
-  select.addEventListener('click', () => {
-    select.classList.toggle('select-clicked');
-    caret.classList.toggle('caret-rotate');
-    menu.classList.toggle('menu-open');
-  });
+    // Toggle dropdown open/close
+    select.addEventListener('click', () => {
+      select.classList.toggle('select-clicked');
+      caret.classList.toggle('caret-rotate');
+      menu.classList.toggle('menu-open');
+    });
 
-  // Handle option selection
-  options.forEach(option => {
-    option.addEventListener('click', () => {
-      selected.innerText = option.innerText; // Update selected text
-      select.classList.remove('select-clicked');
-      caret.classList.remove('caret-rotate');
-      menu.classList.remove('menu-open');
+    // Handle option selection
+    options.forEach(option => {
+      option.addEventListener('click', () => {
+        selected.innerText = option.innerText; // Update selected text
+        select.classList.remove('select-clicked');
+        caret.classList.remove('caret-rotate');
+        menu.classList.remove('menu-open');
 
-      options.forEach(opt => {
-        opt.classList.remove('active'); // Remove active class from all options
+        options.forEach(opt => {
+          opt.classList.remove('active'); // Remove active class from all options
+        });
+        option.classList.add('active'); // Add active class to selected option
       });
-      option.classList.add('active'); // Add active class to selected option
     });
   });
-});
 
 </script>
