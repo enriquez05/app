@@ -215,7 +215,6 @@ function addEventListeners() {
 async function addDataWeightListener() {
     const weight_order = document.getElementById("weight_order");
     const price_order = document.getElementById("price_order");
-    const price_per_gram = document.getElementById("price_per_gram");
 
     const starCountRef = ref(rdb, 'sensorval/currentweight');
     onValue(starCountRef, async (snapshot) => {
@@ -226,25 +225,19 @@ async function addDataWeightListener() {
         const priceSnapshot = await get(priceValueRef);
         const currentPrice = priceSnapshot.val();
 
-        price_per_gram.value = currentPrice;
-        if (data && currentPrice) {
-            price_order.value = (parseFloat(data) * parseFloat(currentPrice)).toFixed(2);
-        }
+        price_order.value = currentPrice;
     });
 
     const priceValueRef2 = ref(rdb, 'PriceVal/CurrentPrice');
     onValue(priceValueRef2, async (snapshot) => {
         const data = snapshot.val();
-        price_per_gram.value = data;
+        price_order.value = data;
 
         const weightValueRef = ref(rdb, 'sensorval/currentweight');
         const weightSnapshot = await get(weightValueRef);
         const currentWeight = weightSnapshot.val();
 
         weight_order.value = currentWeight;
-        if (data && currentWeight) {
-            price_order.value = (parseFloat(currentWeight) * parseFloat(data)).toFixed(2);
-        }
     });
 }
 
