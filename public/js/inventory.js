@@ -238,8 +238,9 @@ function displayClickedContent(dataContent){
     const addStocksListener = () => {
         const add_stocks = parseInt(document.getElementById("add_stocks").value, 10);
         if (add_stocks > 0) {
-            dataContent.item_quantity += add_stocks;
+            dataContent.item_quantity = parseInt(dataContent.item_quantity, 10) + add_stocks;
             stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
+            document.getElementById("add_stocks").value = "";
             updateItemInFirestore(dataContent, 1);
         } else {
             Swal.fire({
@@ -258,6 +259,7 @@ function displayClickedContent(dataContent){
         if (add_stocks_price > 0) {
             dataContent.item_sellingPrice = add_stocks_price;
             price_value.innerHTML = `<p>₱${dataContent.item_sellingPrice}</p>`;
+            document.getElementById("add_stocks_price").value = "";
             updateItemInFirestore(dataContent, 1);
         } else {
             Swal.fire({
@@ -361,16 +363,30 @@ function displayLogClickedContent(){
 
         console.log("Current Weight:", currentWeight);
         console.log("totalWeightValue:", totalWeightValue);
-        console.log("Condition Check:", currentWeight > 0);
-
         
         if (currentWeight > 0){
-            if (totalWeightValue > 0){currentClickDataContent.item_currentWeight = totalWeightValue;}
-            grams_weightValue.placeholder = `${currentClickDataContent.item_currentWeight} G`;
-            grams_weightValue.value = `${currentClickDataContent.item_currentWeight}`;
-            updateItemInFirestore(currentClickDataContent, 2);
+            if (totalWeightValue >= currentWeight){
+                currentClickDataContent.item_currentWeight = totalWeightValue;
+                grams_weightValue.placeholder = `${currentClickDataContent.item_currentWeight} G`;
+                grams_weightValue.value = `${currentClickDataContent.item_currentWeight}`;
+                updateItemInFirestore(currentClickDataContent, 2);
+            } else {
+                Swal.fire({
+                    title: 'Error',
+                    text: `Invalid value of total weight.`,
+                    icon: 'error',
+                    confirmButtonText: 'OK',
+                });
+            }
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: `Invalid value of current weight.`,
+                icon: 'error',
+                confirmButtonText: 'OK',
+            });
         }
-    }, { once: true });
+    });
 }
 
 async function updateItemInFirestore(dataContent, flag) {
@@ -514,7 +530,7 @@ function displayAddItemForm(){
         const add_item_name_value = document.getElementById("add_item_name_value").value;
         const add_item_quantity_value = document.getElementById("add_item_quantity_value").value;
         const add_item_sellingPrice_value = document.getElementById("add_item_sellingPrice_value").value;
-        const add_item_currentWeight_value = document.getElementById("add_item_currentWeight_value").value;
+        // const add_item_currentWeight_value = document.getElementById("add_item_currentWeight_value").value;
         let errorMessage = "";
 
         if (add_item_name_value.length === 0) {
@@ -523,9 +539,10 @@ function displayAddItemForm(){
             errorMessage += "Please input a valid item quantity.\n";
         }else if (add_item_sellingPrice_value <= 0 || isNaN(add_item_sellingPrice_value)) {
             errorMessage += "Please input a valid item selling price.\n";
-        }else if (add_item_currentWeight_value <= 0 || isNaN(add_item_currentWeight_value)) {
-            errorMessage += "Please input a valid item current weight.\n";
         }
+        // else if (add_item_currentWeight_value <= 0 || isNaN(add_item_currentWeight_value)) {
+        //     errorMessage += "Please input a valid item current weight.\n";
+        // }
     
         // If there's an error, show a Swal alert
         if (errorMessage) {
@@ -541,7 +558,7 @@ function displayAddItemForm(){
             });
         } else {
             const itemDetails = {
-                item_currentWeight: add_item_currentWeight_value,
+                item_currentWeight: 0,
                 item_id: "",
                 item_name: add_item_name_value,
                 item_purchaseCount: 0,

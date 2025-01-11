@@ -11,6 +11,7 @@ import {
 } from "./firebaseConfig.js";
 
 let currentSnapshot = null;
+let currentSnapshotDisplayed = null;
 
 document.addEventListener("DOMContentLoaded", function() {
     const logout = document.getElementById("logout");
@@ -47,10 +48,6 @@ function addEventListeners(){
     const current_date = document.getElementById("current_date");
     const searchbar = document.getElementById("searchbar");
 
-    const today = new Date();
-    const formattedDate = today.toISOString().split('T')[0];
-    current_date.value = formattedDate;
-
     back_btn.addEventListener("click", () => {
         window.location.href = '../html/inventory.html';
     });
@@ -58,6 +55,26 @@ function addEventListeners(){
     searchbar.addEventListener("input", () => {
         let searchTearm = document.getElementById("searchbar").value;
         updateSalesReportTable(searchTearm);
+    });
+
+    current_date.addEventListener("change", () => {
+        let inputDate = document.getElementById("current_date").value;
+
+        if (inputDate){
+            const date = new Date(inputDate);
+
+            // Extract components
+            const month = String(date.getMonth() + 1).padStart(2, '0'); // getMonth() is zero-based
+            const day = String(date.getDate()).padStart(2, '0');
+            const year = date.getFullYear();
+    
+            // Format to mm/dd/yyyy
+            const formattedDate = `${month}/${day}/${year}`;
+            console.log(formattedDate);
+            updateSalesReportTable(formattedDate);
+        } else {
+            updateSalesReportTable();
+        }
     });
 }
 
@@ -115,10 +132,11 @@ function updateSalesReportTable(searchTearm){
             currentSnapshot.forEach((doc) => {
                 const data = doc.data();
                 const dataName = data.order_itemName.toLowerCase();
+                const dataDate = data.order_dateOrdered.toLowerCase();
                 const searchTermLower = searchTearm.toLowerCase(); 
 
                 // Check for partial match
-                if (dataName.includes(searchTermLower)) {
+                if (dataName.includes(searchTermLower) || dataDate.includes(searchTermLower)) {
                     appendReportItem(data, daily_report_container);
                 }
             });

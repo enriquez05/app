@@ -146,15 +146,17 @@ body {
 }
 
 .date{
-    position: absolute;
-    top: 20px;
-    right: 20px;
-    padding: 10px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: end;
+}
+
+.date p {
     background-color: #ffafb6;
     border: none;
     border-radius: 5px;
     font-size: 16px;
-    cursor: pointer;
+    padding: 10px 20px;
 }
 
 .topping1, .topping2, .topping3, .topping4, .topping5, .topping6, .cup1{
