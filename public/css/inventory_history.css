@@ -126,6 +126,11 @@ body {
     text-align: center;
 }
 
+.graph-description{
+    margin-top: 10px;
+    font-size: 15px;
+}
+
 @media (max-width: 1440px){
     .sidebar{
         font-size: 15px;
