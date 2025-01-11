@@ -63,15 +63,45 @@ async function populateGraphs(selectedTimeframe) {
         const item = inventoryItems[itemId];
         const totalPurchases = item.totalPurchases;
         const graphContainerId = `graph${index + 1}`;
-        const graphContainer = createGraphContainer(graphContainerId, item.name);
+        const chartData = prepareChartData(totalPurchases, selectedTimeframe);
+        const description = generateDescription(chartData, selectedTimeframe, item.name);
+        const graphContainer = createGraphContainer(graphContainerId, item.name, description);
 
         graphsContainer.appendChild(graphContainer);
-        const chartData = prepareChartData(totalPurchases, selectedTimeframe);
         renderGraph(graphContainerId, chartData.labels, chartData.salesCount);
     });
 }   
 
-function createGraphContainer(containerId, title) {
+function generateDescription(chartData, selectedTimeframe, itemName){
+    let description = "Sales Summary: ";
+
+    // Check if there's no data
+    if (chartData.salesCount.every(count => count === 0)) {
+        return "No sales data available for the selected timeframe.";
+    }
+
+    // Build description by iterating over labels and sales counts
+    chartData.labels.forEach((label, index) => {
+        const sales = chartData.salesCount[index];
+        if (sales > 0) {
+            description += `${label} had ${sales} sale${sales > 1 ? 's' : ''}. `;
+        }
+    });
+
+    // Analyze trends
+    const maxSales = Math.max(...chartData.salesCount);
+    const maxIndex = chartData.salesCount.indexOf(maxSales);
+    if (maxSales > 0) {
+        description += `<br>The highest sales were during ${chartData.labels[maxIndex]} with ${maxSales} sale${maxSales > 1 ? 's' : ''}. `;
+    }
+
+    const totalSales = chartData.salesCount.reduce((sum, count) => sum + count, 0);
+    description += `<br><b>${selectedTimeframe} total sales on ${itemName}: ${totalSales}.</b>`;
+
+    return description;
+}
+
+function createGraphContainer(containerId, title, description) {
     const container = document.createElement("div");
     container.classList.add("graph-container");
   
@@ -81,6 +111,9 @@ function createGraphContainer(containerId, title) {
       </div>
       <div class="graph-title">
         <p>${title}</p>
+      </div>
+      <div class="graph-description">
+        <p>${description}</p>
       </div>
     `;
   
@@ -192,13 +225,13 @@ function prepareChartData(totalPurchases, selectedTimeframe){
             labels = ['WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4'];
             salesCount = new Array(4).fill(0);
             totalPurchases.forEach((puchaseDate) => {
-                const [day, month, year] = puchaseDate.split('/').map(Number);
+                const [month, day , year] = puchaseDate.split('/').map(Number);
                 const date = new Date(year, month - 1, day); 
                 const today = new Date();
 
                 const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
                 const daysInMonth = date.getDate();
-                const weekNumber = Math.floor((daysInMonth - 1) / 7) + 1;
+                const weekNumber = Math.floor((daysInMonth - 1) / 7) ;
 
                 if (date.getMonth() !== today.getMonth() || date.getFullYear() !== today.getFullYear()) {
                     console.log("buffer.");

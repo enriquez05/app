@@ -1,0 +1,261 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+
+/* Global Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Poppins', sans-serif;
+}
+
+body {
+    display: flex;
+    height: 100vh;
+    width: 100vw;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7cdd0;
+    overflow-x: hidden; 
+}
+
+.transaction{
+    background-color: #ffafb6;
+}
+
+/* Layout */
+.whole {
+    display: flex;
+    width: 100%;
+    height: 100%;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    margin: 0;
+    padding: 30px;
+    width: 300px;
+    background-color: #f2d6d8;
+    height: 100%;
+    font-size: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Sidebar Links */
+.sidebar a {
+    justify-content: center;
+    width: 100%;
+    display: block;
+    color: black;
+    padding: 25px;
+    text-decoration: none;  
+    border-radius: 10px;
+    font-size: 20px;
+}
+
+.hamburger {
+    display: none;
+    position: fixed;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    font-size: 24px;
+    color: #333;
+    cursor: pointer;
+    z-index: 1000;
+}
+
+.top{
+    display: flex;
+    flex-direction: column;
+    margin-top: 50px;
+    flex: 1;
+    gap: 5px;
+}   
+
+.bot a{
+    font-size: 20px;
+}
+
+.sidebar a:hover {
+    background-color: #ffafb6;
+    color: white;
+}
+
+/* Bottom Section of Sidebar */
+.bot {
+    display: flex;
+    flex-direction: column;
+    bottom: 20px;
+    gap: 5px;
+}
+
+.content{
+    display: flex;
+    flex-direction: row;
+    flex-grow: 1;
+    margin-left: 5%;
+    justify-content: center;
+}
+
+.today-sale{
+    display: flex;
+    flex-direction: column;
+    /* background-color: white; */
+    border-radius: 10px;
+    height: 98vh;
+    width: 70vw;
+    padding: 10px 25px;
+    box-sizing: border-box;
+}
+
+.back-date-container{
+    display: flex;
+    flex-direction: row;
+    /* background-color: #3333333b; */
+}
+
+.date-picker-container{
+    display: flex;
+    flex-direction: column;
+    /* background-color: #df8484; */
+    flex: 1;
+    align-items: end;
+}
+
+.from-date-container,
+.to-date-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    border-bottom: solid 1px black;
+    font-size: 12px;
+    gap: 5px;
+}
+
+.from-date-container input,
+.to-date-container input{
+    background-color: transparent;
+    width: 160px;
+    height: 25px;
+    font-size: 12px;
+    display: block;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.sale-container{
+    display: flex;
+    flex-direction: column;
+    /* background-color: #f7838d; */
+    height: 90vh;
+    width: 100%;
+    max-height: 90vh;
+    margin-top: 10px;
+    overflow-y: auto;
+}
+
+.sale-report-p{
+    /* background-color: #f7cdd0; */
+    font-size: 20px;
+    font-weight: 400;
+    text-align: center;
+}
+
+#sale_table_container{
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    /* background-color: #916669; */
+    /* align-items: center; */
+    overflow-y: auto;
+}
+
+.export-btn-container{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#export_sale_btn,
+#daily_item_report_btn{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background-color: #f7838d;
+    padding: 10px 50px;
+    border-radius: 10px;
+    margin-top: 10px;
+    cursor: pointer;
+}
+
+.table-title-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    /* background-color: #333; */
+}
+
+
+.title-date-container,
+.title-total-sale-container{
+    background-color: #ff9999;
+    height: 40px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+.report-item-container{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-top: 3px;
+}
+
+.report-item-date-value,
+.report-item-sale-value{
+    background-color: #ffe3e3;
+    height: 30px;
+    justify-content: center;
+    align-items: center;
+    display: flex;
+    flex: 1;
+}
+
+@media (max-width: 1440px) {
+    .sidebar{
+        font-size: 15px;
+        width: 200px;
+        padding: 10px;
+    }
+    .top{
+        margin-top: 0px;
+    }
+    .sidebar a{
+        font-size: 15px;
+        padding: 10px;
+    }
+    .content{
+        margin-left: 1%;
+    }
+    input{
+        margin: 5px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .hamburger {
+        display: block;
+    }
+    .sidebar{
+        width: 120px;
+    }
+}

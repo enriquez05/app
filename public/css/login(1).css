@@ -1,0 +1,250 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900&display=swap');
+
+body {
+  background-color: #f7cdd0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+}
+
+#main_div {
+  height: 100vh;
+  width: 100vw;
+  margin: 0 auto;
+  position: relative;
+}
+
+#log_text_div {
+  height: 100px;
+  margin-top: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 100px;
+  font-weight: 800;
+}
+
+.qText {
+  font-size: 24px;
+  font-weight: 300;
+  text-align: center;
+  margin-top: 20px;
+}
+
+.dropdown {
+  width: 350px;
+  height: 60px;
+  position: absolute;
+  top: 200px; /* Ensure there is enough space for dropdown */
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  z-index: 10; /* Ensure dropdown stays above other elements */
+}
+
+.select {
+  width: 100%;
+  height: 100%;
+  background: transparent;
+  color: black;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px #2a2f3b solid;
+  border-radius: 30px;
+  padding: 0.9em;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.select-clicked {
+  border: 2px #26489a solid;
+  box-shadow: 0 0 0.8em #26489a;
+}
+
+.select:hover {
+  background: pink;
+}
+
+.caret {
+  width: 0;
+  height: 0;
+  border-left: 4px solid transparent;
+  border-right: 4px solid transparent;
+  border-top: 5px solid black;
+  transition: 0.3s;
+}
+
+.caret-rotate {
+  transform: rotate(180deg);
+}
+
+.menu {
+  list-style: none;
+  padding: 0.2em 0.5em;
+  background: #f7cdd0;
+  border: 1px #363a43 solid;
+  box-shadow: 0 0.5em 1em rgba(0, 0, 0, 0.2);
+  border-radius: 0.5em;
+  color: black;
+  position: absolute;
+  top: 3em;
+  left: 50%;
+  width: 70%;
+  transform: translate(-50%);
+  opacity: 0;
+  display: none;
+  transition: 0.2s;
+  z-index: 11; /* Ensure the dropdown menu is above other elements */
+}
+
+.menu li {
+  padding: 0.5em;
+  margin: 0.2em 0;
+  border-radius: 0.5em;
+  cursor: pointer;
+}
+
+.menu li:hover {
+  background: purple;
+}
+
+.active {
+  background: pink;
+}
+
+.menu-open {
+  display: block;
+  opacity: 1;
+}
+
+.username_pass {
+  width: 350px;
+  height: 50px;
+  position: absolute;
+  top: 300px; /* Directly below qText */
+  left: 50%;
+  transform: translateX(-50%); /* Horizontal centering */
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+  gap: 50px; 
+}
+
+.username, .password {
+  width: 100%;
+}
+
+.username label, .password label {
+  display: block;
+  text-align: center; /* Center text inside labels */
+  font-weight: normal; /* Remove bold text */
+}
+
+.username input, .password input {
+  width: 350px;
+  height: 55px; /* Match the height of the dropdown */
+  padding: 0 15px; /* Adjust padding for consistency */
+  margin-top: 5px;
+  border: 2px solid #2a2f3b;
+  border-radius: 30px;
+  background-color: transparent;
+  font-size: 16px;
+}
+
+.button {
+  width: 370px;
+  height: 50px;
+  position: absolute;
+  top: 550px; /* Directly below qText */
+  left: 51%;
+  transform: translateX(-50%); /* Horizontal centering */
+  display: flex;
+  flex-direction: column;
+  font-size: 20px;
+}
+
+.button a{
+  text-decoration: none;
+}
+
+.login-btn {
+  width: 385px;
+  height: 55px;
+  padding: 0 15px;
+  border: 2px solid #2a2f3b;
+  border-radius: 30px;
+  background-color: #f7838d;
+  font-size: 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer; /* Ensures it's clickable */
+}
+
+@media (max-width: 768px) {
+  #main_div{
+    height: 100vh;
+    width: 100vw;
+  }
+  #log_text_div{
+    height: 60px;
+    font-size: 60px;
+  }
+  .qText{
+    margin-top: 10px;
+    font-size: 18px;
+  }
+  .dropdown{
+    top: 140px;
+  }
+  .menu{
+    top: 50px;
+    left: 54%;
+    width: 100%;
+  }
+  .username_pass{
+    top: 210px;
+    gap: 10px;
+  }
+  .button{
+    top: 425px;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 425px){
+  #log_text_div{
+    height: 40px;
+    font-size: 50px;
+  }
+  .qText{
+    font-size: 15px;
+  }
+  .dropdown{
+    width: 250px;
+    top: 110px;
+  }
+  .menu{
+    left: 50%;
+    width: 90%;
+  }
+  .username_pass{
+    width: 250px;
+    top: 180px;
+  }
+  .username input, .password input, .select{
+    width: 220px;
+  }
+  .button, .login-btn{
+    width: 250px;
+  }
+  .button{
+    top: 395px;
+    margin-top: 0;
+  }
+}

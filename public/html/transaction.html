@@ -17,9 +17,11 @@
               <a href="../html/sales.html">Sales</a>
               <a href="../html/inventory.html">Inventory</a>
               <a href="../html/invetory_history.html">Inventory History</a>
+
           </div>
           <div class="bot">
               <a href="../html/change_pass.html">Change Password</a>
+              <div id="status"></div>
               <a href="#" id="logout">Sign Out</a>
           </div>
 
@@ -36,7 +38,11 @@
                   </div>
                   <div class="weight">
                     <label for="weight">Weight (g)</label>
-                    <input type="number" id="weight_order" name="weight" value="0000" readonly>
+                    <input type="number" id="weight_order" name="weight" value="0000" >
+                  </div>
+                  <div class="price-per-gram">
+                    <label for="weight">Price per gram (₱)</label>
+                    <input type="number" id="price_per_gram" name="weight" placeholder="0.00">
                   </div>
                   <div class="total">
                     <label for="total"> Total </label>
@@ -90,9 +96,7 @@
                 <div class="discount">
                   <button id="add_discount_btn">Add Discount</button>
                 </div>
-                <div class="vat">
-                  <button id="add_vat_btn">VAT</button>
-                </div>
+           
                 <div class="total_price">
                   <p>Total: </p>
                   <p id="total_price_value">₱00.00</p>

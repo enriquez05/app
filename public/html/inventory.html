@@ -115,13 +115,20 @@
                 
                 <div class="btn">
                     <a href="../html/daily_item_report.html"> View Daily Item Report</a>
+                    <p id="add_item_button">Add item</p>
                 </div>
             </div>
 
             <div class="popup1" id="popup1">
-                <button class="back" id="back_btn1">
-                    <img src = "../img/back_button.png">
-                </button>
+                <div class="buttons-container">
+                    <button class="back" id="back_btn1">
+                        <img src = "../img/back_button.png">
+                    </button>
+                    <div class="delete" id="delete_item_btn1">
+                        <img src = "../img/bin_icon_1.png">
+                    </div>
+                </div>
+                
                 <div class="toppings-title" id="popup1_name">
                     <p> TOPPING 1</p>
                 </div>
@@ -147,7 +154,7 @@
                         <label for="add_stocks">ADD STOCKS</label>
                     </div>
                     <div class="add-input">
-                        <input type="number" id="add_stocks" name="add_stocks" value="00">
+                        <input type="number" id="add_stocks" name="add_stocks" placeholder="00">
                         <button id="add_stocks_btn"> Confirm </button>
                     </div>
                 </div>
@@ -156,7 +163,7 @@
                         <label for="price-update">PRICE UPDATE</label>
                     </div>
                     <div class="price-input">
-                        <input type="number" id="add_stocks_price" name="price-update" value="00">
+                        <input type="number" id="add_stocks_price" name="price-update" placeholder="00">
                         <button id="add_stocks_price_btn"> Confirm </button>
                     </div>
                 </div>
@@ -196,6 +203,37 @@
                         <input type="number" id="added_weight" name="added_weight" placeholder="00 G" readonly>
                     </div>
                 </div>
+            </div>
+
+            <div class="addItemPopup" id="addItemPopup">
+                <div class="buttons-container">
+                    <button class="back" id="back_btn3">
+                        <img src = "../img/back_button.png">
+                    </button>
+                </div>
+
+                <div class="add-form-title">
+                    <p> ADD NEW ITEM FORM</p>
+                </div>
+                
+                <div class="add-form-text-input-container">
+                    <p>Item Name</p>
+                    <input type="text" name="add_item_name" id="add_item_name_value" placeholder="e.g.: Hotdog">
+                </div>
+                <div class="add-form-text-input-container">
+                    <p>Item Quantity</p>
+                    <input type="number" name="add_item_quantity" id="add_item_quantity_value" placeholder="e.g.: 1">
+                </div>
+                <div class="add-form-text-input-container">
+                    <p>Item Selling Price (₱)</p>
+                    <input type="number" name="add_item_sellingPrice" id="add_item_sellingPrice_value" placeholder="e.g.: 100">
+                </div>
+                <div class="add-form-text-input-container">
+                    <p>Item Current Weight (g)</p>
+                    <input type="number" name="add_item_currentWeight" id="add_item_currentWeight_value" placeholder="e.g.: 10">
+                </div>
+
+                <button class="log-btn" id="add_new_item_button"> SUBMIT </button>
             </div>
 
             <div id="overlay"></div>
