@@ -175,7 +175,7 @@ async function updateInventoryValues(){
                         </div>
                         <div class="cup3">
                             <div class="stocks_container">
-                                <p>${data.item_quantity + " g" || "N/A"}</p>
+                                <p>${data.item_quantity + " pcs" || "N/A"}</p>
                             </div>
                         </div>
                     `;
@@ -219,7 +219,7 @@ function displayClickedContent(dataContent){
     const delete_item_btn1 = document.getElementById("delete_item_btn1");
 
     popup1_name.innerHTML = `<p>${dataContent.item_name}</p>`;
-    stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
+    stocks_value.innerHTML = `<p>${dataContent.item_quantity} g</p>`;
     price_value.innerHTML = `<p>₱${dataContent.item_sellingPrice}</p>`;
 
     console.log("dataContent.item_id: "+dataContent.item_id);
