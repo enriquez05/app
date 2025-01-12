@@ -222,6 +222,10 @@ function displayClickedContent(dataContent){
     stocks_value.innerHTML = `<p>${dataContent.item_quantity} g</p>`;
     price_value.innerHTML = `<p>₱${dataContent.item_sellingPrice}</p>`;
 
+    if (dataContent.item_name === "Cups"){
+        stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
+    }
+
     console.log("dataContent.item_id: "+dataContent.item_id);
 
     if(dataContent.item_id != "hTh5A6r3FEvnRBIDtROo"){
@@ -239,7 +243,12 @@ function displayClickedContent(dataContent){
         const add_stocks = parseInt(document.getElementById("add_stocks").value, 10);
         if (add_stocks > 0) {
             dataContent.item_quantity = parseInt(dataContent.item_quantity, 10) + add_stocks;
-            stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
+            stocks_value.innerHTML = `<p>${dataContent.item_quantity} g</p>`;
+
+            if (dataContent.item_name === "Cups"){
+                stocks_value.innerHTML = `<p>${dataContent.item_quantity} PCS</p>`;
+            }
+
             document.getElementById("add_stocks").value = "";
             updateItemInFirestore(dataContent, 1);
         } else {
