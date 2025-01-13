@@ -73,7 +73,7 @@ function addEventListeners(){
             console.log(formattedDate);
             updateSalesReportTable(formattedDate);
         } else {
-            updateSalesReportTable();
+            updateSalesReportTable("");
         }
     });
 }

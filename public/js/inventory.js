@@ -411,8 +411,8 @@ async function updateItemInFirestore(dataContent, flag) {
             const minutes = String(now.getMinutes()).padStart(2, '0');
             const seconds = String(now.getSeconds()).padStart(2, '0');
 
-            let currentWeight = dataContent.item_currentWeight;
-            let currentTotalPrice = (currentWeight * dataContent.item_sellingPrice);
+            let currentWeight = document.getElementById("added_weight").value;
+            let currentTotalPrice = (parseInt(currentWeight) * dataContent.item_sellingPrice);
 
             let orderDetails = {
                 order_list: [],

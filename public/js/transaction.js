@@ -52,6 +52,7 @@ function addEventListeners() {
     const total_price_value = document.getElementById("total_price_value");
     const goto_payment_btn = document.getElementById("goto_payment_btn");
     const finalize_sale_btn = document.getElementById("finalize_sale_btn");
+    const pricePerGram = document.getElementById("price_per_gram");
 
     order_payment_container.innerHTML = '';
     let currentWeight = 0;
@@ -80,12 +81,19 @@ function addEventListeners() {
     // set up and change data listener from firestore 
     // then compute the price when data changes 
     // then update the values
-    // weight_order.addEventListener("change", () => {
-    //     const currentPricePerGram = 0;
-    //     currentWeight = parseFloat(weight_order.value);
-    //     currentTotalPrice = (currentWeight * currentPricePerGram) / 100;
-    //     price_order.value = currentTotalPrice.toFixed(2);
-    // });
+    weight_order.addEventListener("change", () => {
+        const currentPricePerGram = document.getElementById("price_per_gram").value;
+        currentWeight = parseFloat(weight_order.value);
+        currentTotalPrice = (currentWeight * currentPricePerGram);
+        price_order.value = currentTotalPrice.toFixed(2);
+    });
+
+    pricePerGram.addEventListener("change", () => {
+        const currentPricePerGram = document.getElementById("price_per_gram").value;
+        currentWeight = parseFloat(weight_order.value);
+        currentTotalPrice = (currentWeight * currentPricePerGram);
+        price_order.value = currentTotalPrice.toFixed(2);
+    });
 
     add_order_btn.addEventListener("click", () => {
         if (currentTotalPrice > 0) {
@@ -215,30 +223,32 @@ function addEventListeners() {
 async function addDataWeightListener() {
     const weight_order = document.getElementById("weight_order");
     const price_order = document.getElementById("price_order");
+    const pricePerGram = document.getElementById("price_per_gram");
 
     const starCountRef = ref(rdb, 'sensorval/currentweight');
     onValue(starCountRef, async (snapshot) => {
         const data = snapshot.val();
         weight_order.value = data;
+        weight_order.dispatchEvent(new Event('change'));
 
-        const priceValueRef = ref(rdb, 'PriceVal/CurrentPrice');
-        const priceSnapshot = await get(priceValueRef);
-        const currentPrice = priceSnapshot.val();
+        // const priceValueRef = ref(rdb, 'PriceVal/CurrentPrice');
+        // const priceSnapshot = await get(priceValueRef);
+        // const currentPrice = priceSnapshot.val();
 
-        price_order.value = currentPrice;
+        // price_order.value = currentPrice;
     });
 
-    const priceValueRef2 = ref(rdb, 'PriceVal/CurrentPrice');
-    onValue(priceValueRef2, async (snapshot) => {
-        const data = snapshot.val();
-        price_order.value = data;
+    // const priceValueRef2 = ref(rdb, 'PriceVal/CurrentPrice');
+    // onValue(priceValueRef2, async (snapshot) => {
+    //     const data = snapshot.val();
+    //     price_order.value = data;
 
-        const weightValueRef = ref(rdb, 'sensorval/currentweight');
-        const weightSnapshot = await get(weightValueRef);
-        const currentWeight = weightSnapshot.val();
+    //     const weightValueRef = ref(rdb, 'sensorval/currentweight');
+    //     const weightSnapshot = await get(weightValueRef);
+    //     const currentWeight = weightSnapshot.val();
 
-        weight_order.value = currentWeight;
-    });
+    //     weight_order.value = currentWeight;
+    // });
 }
 
 
