@@ -373,7 +373,7 @@ function displayLogClickedContent(){
         console.log("Current Weight:", currentWeight);
         console.log("totalWeightValue:", totalWeightValue);
         
-        if (currentWeight > 0){
+        if (currentWeight >= 0){
             if (totalWeightValue >= currentWeight){
                 currentClickDataContent.item_currentWeight = totalWeightValue;
                 grams_weightValue.placeholder = `${currentClickDataContent.item_currentWeight} G`;
