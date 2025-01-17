@@ -507,6 +507,10 @@ body {
     font-weight: 600;
 }
 
+#generate_random_data{
+    cursor: pointer;
+}
+
 @media (max-width: 1440px){
     .sidebar{
         font-size: 15px;

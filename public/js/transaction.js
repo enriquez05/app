@@ -65,7 +65,7 @@ function addEventListeners() {
         order_list: [],
         order_itemType: 'UTENSILS',
         order_dateOrdered: '',
-        order_itemID: 'hTh5A6r3FEvnRBIDtROo',
+        order_itemID: 'vi0Gu6BOuO9Cyzej3L5t',
         order_itemName: 'Cups',
         order_paymentChange: 0,
         order_paymentMethod: '',
@@ -208,11 +208,21 @@ function addEventListeners() {
     });
 
     goto_payment_btn.addEventListener("click", () => {
-        orderDetails.order_totalPrice = finalTotalPrice;
-        orderDetails.order_weight = finalTotalWeight;
-        orderDetails.order_quantity = totalOrdersCount;
-        const serializedOrderDetails = encodeURIComponent(JSON.stringify(orderDetails));
-        window.location.href = `../html/transaction_payment.html?orderDetails=${serializedOrderDetails}`;
+        if (finalTotalPrice > 0){
+            orderDetails.order_totalPrice = finalTotalPrice;
+            orderDetails.order_weight = finalTotalWeight;
+            orderDetails.order_quantity = totalOrdersCount;
+            const serializedOrderDetails = encodeURIComponent(JSON.stringify(orderDetails));
+            window.location.href = `../html/transaction_payment.html?orderDetails=${serializedOrderDetails}`;
+        } else {
+            Swal.fire({
+                title: "No Data",
+                text: "No transactions found.",
+                icon: "info",
+                confirmButtonText: "OK",
+            });
+        }
+        
     });
 
     finalize_sale_btn.addEventListener("click", () => {
