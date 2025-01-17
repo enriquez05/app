@@ -73,11 +73,11 @@ async function populateGraphs(selectedTimeframe) {
 }   
 
 function generateDescription(chartData, selectedTimeframe, itemName){
-    let description = "Sales Summary: ";
+    let description = "Summary: ";
 
     // Check if there's no data
     if (chartData.salesCount.every(count => count === 0)) {
-        return "No sales data available for the selected timeframe.";
+        return "No sold data available for the selected timeframe.";
     }
 
     // Build description by iterating over labels and sales counts
@@ -143,10 +143,14 @@ async function fetchInventoryAndTransactions() {
         const data = doc.data();
         const itemId = data.order_itemID;
         const orderDate = data.order_dateOrdered;   
-  
+        const orderWeight = data.order_weight; // Include weight
+
         // Match transaction items with inventory
         if (inventoryItems[itemId]) {
-            inventoryItems[itemId].totalPurchases.push(orderDate);
+            inventoryItems[itemId].totalPurchases.push({
+                date: orderDate,
+                weight: orderWeight, // Add weight to the purchase
+            });
         }
     });
   
@@ -217,58 +221,79 @@ function prepareChartData(totalPurchases, selectedTimeframe){
             labels = getLast7Days();
             salesCount = new Array(7).fill(0);
             labels.forEach((label, index) => {
-                const count = totalPurchases.filter(purchase => purchase === label).length;
-                salesCount[index] += count;
+                const filteredPurchases = totalPurchases.filter(purchase => purchase.date === label);
+                console.log(`Label: ${label}, Purchases:`, filteredPurchases);
+
+                filteredPurchases.forEach(purchase => {
+                    const weight = parseFloat(purchase.weight) || 0;
+                    salesCount[index] += weight; // Sum up weights for this day
+                    console.log(`Adding weight ${weight} to index ${index}`);
+                });
             });
+            break;
+
+            labels = getLast7Days(); // Get last 7 days as labels
+            salesCount = new Array(7).fill(0);
+
+            labels.forEach((label, index) => {
+                totalPurchases
+                    .filter(purchase => purchase.date === label) // Match the date
+                    .forEach(purchase => {
+                        salesCount[index] += parseFloat(purchase.weight) || 0; // Ensure weight is numeric
+                    });
+            });
+
+            // Include any purchases made on the last day
+            const lastLabel = labels[labels.length - 1];
+            totalPurchases
+                .filter(purchase => purchase.date === lastLabel)
+                .forEach(purchase => {
+                    salesCount[labels.length - 1] += parseFloat(purchase.weight) || 0;
+                });
+
             break;
         case "Weekly":
             labels = ['WEEK 1', 'WEEK 2', 'WEEK 3', 'WEEK 4'];
             salesCount = new Array(4).fill(0);
-            totalPurchases.forEach((puchaseDate) => {
-                const [month, day , year] = puchaseDate.split('/').map(Number);
-                const date = new Date(year, month - 1, day); 
-                const today = new Date();
 
-                const firstDayOfMonth = new Date(date.getFullYear(), date.getMonth(), 1);
-                const daysInMonth = date.getDate();
-                const weekNumber = Math.floor((daysInMonth - 1) / 7) ;
-
-                if (date.getMonth() !== today.getMonth() || date.getFullYear() !== today.getFullYear()) {
-                    console.log("buffer.");
-                } else {
-                    salesCount[weekNumber] += 1;
-                }
+            totalPurchases.forEach(purchase => {
+                const [month, day, year] = purchase.date.split('/').map(Number);
+                const date = new Date(year, month - 1, day);
+                const weekNumber = Math.floor((date.getDate() - 1) / 7); // Calculate week number
+                salesCount[weekNumber] += parseFloat(purchase.weight) || 0;
             });
+
             break;
         case "Monthly":
             labels = ['JANUARY', 'FEBRUARY', 'MARCH', 'APRIL', 'MAY', 'JUNE', 'JULY', 'AUGUST', 'SEPTEMBER', 'OCTOBER', 'NOVEMBER', 'DECEMBER'];
             salesCount = new Array(12).fill(0);
-            totalPurchases.forEach((puchaseDate) => {
-                const [day, month, year] = puchaseDate.split('/').map(Number);
+            totalPurchases.forEach(purchase => {
+                const [month, day, year] = purchase.date.split('/').map(Number);
                 const today = new Date();
                 const currentYear = today.getFullYear();
 
                 if (year === currentYear) {
-                    salesCount[month - 1] += 1;
-                } 
+                    salesCount[month - 1] += parseFloat(purchase.weight) || 0; // Aggregate weights by month
+                }
             });
+
             break;
         case "Annual":
             const currentYear = new Date().getFullYear();
-            labels = [];
-            for (let i = 0; i < 7; i++) {
-                labels.push(currentYear - i);
-            }
-            labels.sort((a, b) => a - b);
+            labels = Array.from({ length: 7 }, (_, i) => currentYear - i).sort((a, b) => a - b); // Last 7 years sorted
             salesCount = new Array(7).fill(0);
 
             labels.forEach((year, index) => {
-                const count = totalPurchases.filter((purchase) => {
-                    const [month, day, yearFromPurchase] = purchase.split('/').map(Number);
-                    return yearFromPurchase === year;  
-                }).length;
-                salesCount[index] += count;
+                totalPurchases
+                    .filter(purchase => {
+                        const [month, day, yearFromPurchase] = purchase.date.split('/').map(Number);
+                        return yearFromPurchase === year;
+                    })
+                    .forEach(purchase => {
+                        salesCount[index] += parseFloat(purchase.weight) || 0; // Aggregate weights for the year
+                    });
             });
+
             break;
     }
     

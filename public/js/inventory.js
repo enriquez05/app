@@ -153,6 +153,9 @@ async function updateInventoryValues(){
                 const data = doc.data();
                 const dataContent = JSON.stringify(data);
 
+                console.log("Document ID:", doc.id);
+                console.log("Data:", data); 
+
                 // Create a dynamic HTML structure for each inventory item
                 const itemDiv = document.createElement("div");
                 itemDiv.classList.add(`topping1`);
@@ -311,6 +314,9 @@ function displayClickedContent(dataContent){
 
     const removeListener = async () => {
         try {
+            if (dataContent.item_id == "vi0Gu6BOuO9Cyzej3L5t"){
+                throw new Error("Cups Item cannot be removed.");
+            }
             // Reference to the specific item document
             const removeItemReference = doc(fdb, "inventory", dataContent.item_id);
     
